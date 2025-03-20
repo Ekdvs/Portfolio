@@ -49,6 +49,59 @@ html {
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block; }
 
+  /* Hero section styling */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Full-screen height */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+}
+
+/* Background image */
+.hero img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1; /* Send it behind the content */
+}
+
+/* Content container */
+.hero .container {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.6); /* Dark overlay for better text readability */
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Heading */
+.hero h2 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Typing effect text */
+.hero p {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .hero h2 {
+    font-size: 2rem;
+  }
+  .hero p {
+    font-size: 1.2rem;
+  }
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
