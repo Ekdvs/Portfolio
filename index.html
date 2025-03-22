@@ -24,6 +24,42 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+	$(document).ready(function() {
+	  function isInViewport(element) {
+		const rect = element.getBoundingClientRect();
+		return rect.top < window.innerHeight && rect.bottom > 0;
+	  }
+  
+	  function animateElements() {
+		$('.skill-bar').each(function() {
+		  if (isInViewport(this) && !$(this).hasClass('animated')) {
+			$(this).addClass('animated');
+			$(this).append(`
+			  <div class="progress" style="height: 12px; background: #ddd; border-radius: 6px; overflow: hidden; position: relative;">
+				<div class="progress-bar" role="progressbar" aria-valuenow="${$(this).attr('data-skill')}" aria-valuemin="0" aria-valuemax="100" 
+				  style="height: 12px; background: linear-gradient(to right, #ff7e5f, #feb47b); border-radius: 6px; width: 0; transition: width 1.5s ease-in-out;">
+				  <span style="position: absolute; right: 10px; top: -25px; font-size: 14px; font-weight: 600; color: #333;">
+					${$(this).attr('data-skill')}%
+				  </span>
+				</div>
+			  </div>`);
+			setTimeout(() => {
+			  $(this).find('.progress-bar').css('width', $(this).attr('data-skill') + '%');
+			}, 100);
+		  }
+		});
+	  }
+  
+	  animateElements();
+	  $(window).on('scroll', animateElements);
+	});
+  </script>
 
 
   </head>
@@ -45,7 +81,6 @@
 	          <li class="nav-item"><a href="#services-section" class="nav-link"><span>Services</span></a></li>
 	          <li class="nav-item"><a href="#skills-section" class="nav-link"><span>Skills</span></a></li>
 	          <li class="nav-item"><a href="#projects-section" class="nav-link"><span>Projects</span></a></li>
-	          <li class="nav-item"><a href="#blog-section" class="nav-link"><span>My Blog</span></a></li>
 	          <li class="nav-item"><a href="#contact-section" class="nav-link"><span>Contact</span></a></li>
 	        </ul>
 	      </div>
@@ -260,203 +295,43 @@
 			</div>
 		</div>
 	</section>
-	<section class="ftco-section" id="skills-section">
-  <div class="container">
-    <div class="row justify-content-center pb-5">
-      <div class="col-md-12 heading-section text-center ftco-animate">
-        <h1 class="big big-2">Skills</h1>
-        <h2 class="mb-4">My Technical Skills</h2>
-        <p>Passionate about software development, web technologies, and scientific research.</p>
-      </div>
-    </div>
-    <div class="row">
-      <!-- Skill Item 1: C# & Java -->
-      <div class="col-md-6 animate-box">
-        <div class="progress-wrap ftco-animate">
-          <h3 class="progress-title">C# & Java</h3>
-          <div class="progress">
-            <div class="progress-bar color-1" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width:90%">
-              <span>90%</span>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Skill Item 2: Python -->
-      <div class="col-md-6 animate-box">
-        <div class="progress-wrap ftco-animate">
-          <h3 class="progress-title">Python</h3>
-          <div class="progress">
-            <div class="progress-bar color-2" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width:85%">
-              <span>85%</span>
-            </div>
-          </div>
-        </div>
-      </div>
+	<section id="skills-section" style="padding: 5em 0; background: #fff; border-radius: 10px; box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1); margin: 40px auto; width: 80%; max-width: 1000px; text-align: center;">
+		<div class="container">
+		  <h2 style="font-size: 32px; color: #333; margin-bottom: 10px;">My Technical Skills</h2>
+		  <p style="color: #666; font-size: 16px; margin-bottom: 30px;">Passionate about software development, web technologies, and scientific research.</p>
+		  <div class="row" style="display: flex; justify-content: space-between;">
+			<div class="col-md-6" style="width: 48%;">
+			  <div class="skill-bar" data-skill="90" style="margin-bottom: 20px; font-weight: 600; font-size: 18px; text-align: left; position: relative;">
+				<span>C# &amp; Java</span>
+			  </div>
+			  <div class="skill-bar" data-skill="85" style="margin-bottom: 20px; font-weight: 600; font-size: 18px; text-align: left; position: relative;">
+				<span>JavaScript</span>
+			  </div>
+			  <div class="skill-bar" data-skill="80" style="margin-bottom: 20px; font-weight: 600; font-size: 18px; text-align: left; position: relative;">
+				<span>Python</span>
+			  </div>
+			  <div class="skill-bar" data-skill="75" style="margin-bottom: 20px; font-weight: 600; font-size: 18px; text-align: left; position: relative;">
+				<span>Spring Boot</span>
+			  </div>
+			</div>
+			<div class="col-md-6" style="width: 48%;">
+			  <div class="skill-bar" data-skill="70" style="margin-bottom: 20px; font-weight: 600; font-size: 18px; text-align: left; position: relative;">
+				<span>MongoDB</span>
+			  </div>
+			  <div class="skill-bar" data-skill="95" style="margin-bottom: 20px; font-weight: 600; font-size: 18px; text-align: left; position: relative;">
+				<span>HTML & CSS</span>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	  </section>
+	  
+	  
+	  
+	  
+	  
 
-      <!-- Skill Item 3: HTML, CSS & JavaScript -->
-      <div class="col-md-6 animate-box">
-        <div class="progress-wrap ftco-animate">
-          <h3 class="progress-title">HTML, CSS & JavaScript</h3>
-          <div class="progress">
-            <div class="progress-bar color-3" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width:95%">
-              <span>95%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Skill Item 4: React & Spring Boot -->
-      <div class="col-md-6 animate-box">
-        <div class="progress-wrap ftco-animate">
-          <h3 class="progress-title">React & Spring Boot</h3>
-          <div class="progress">
-            <div class="progress-bar color-4" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width:90%">
-              <span>90%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Skill Item 5: MySQL & MongoDB -->
-      <div class="col-md-6 animate-box">
-        <div class="progress-wrap ftco-animate">
-          <h3 class="progress-title">MySQL & MongoDB</h3>
-          <div class="progress">
-            <div class="progress-bar color-5" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:80%">
-              <span>80%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Skill Item 6: Android App Development -->
-      <div class="col-md-6 animate-box">
-        <div class="progress-wrap ftco-animate">
-          <h3 class="progress-title">Android App Development</h3>
-          <div class="progress">
-            <div class="progress-bar color-6" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width:85%">
-              <span>85%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Skill Item 7: Software Engineering Principles -->
-      <div class="col-md-6 animate-box">
-        <div class="progress-wrap ftco-animate">
-          <h3 class="progress-title">Software Engineering Principles</h3>
-          <div class="progress">
-            <div class="progress-bar color-1" role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" style="width:88%">
-              <span>88%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Skill Item 8: Research & Analytical Chemistry -->
-      <div class="col-md-6 animate-box">
-        <div class="progress-wrap ftco-animate">
-          <h3 class="progress-title">Research & Analytical Chemistry</h3>
-          <div class="progress">
-            <div class="progress-bar color-2" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:80%">
-              <span>80%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Styles for Progress Bars and Hover Effects -->
-<style>
-  .ftco-animate {
-    transition: all 0.3s ease;
-  }
-
-  .progress-wrap:hover {
-    transform: scale(1.05);
-  }
-
-  .progress-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 15px;
-  }
-
-  .progress-bar {
-    transition: width 0.5s ease;
-    position: relative;
-  }
-
-  .progress-bar span {
-    position: absolute;
-    top: 5px;
-    right: 15px;
-    color: white;
-    font-weight: bold;
-  }
-
-  .color-1 {
-    background-color: #4caf50;
-  }
-
-  .color-2 {
-    background-color: #2196f3;
-  }
-
-  .color-3 {
-    background-color: #ff9800;
-  }
-
-  .color-4 {
-    background-color: #9c27b0;
-  }
-
-  .color-5 {
-    background-color: #f44336;
-  }
-
-  .color-6 {
-    background-color: #03a9f4;
-  }
-
-  .progress {
-    background-color: #f3f3f3;
-    border-radius: 25px;
-    height: 30px;
-  }
-
-  .progress-bar {
-    border-radius: 25px;
-    text-align: center;
-  }
-
-  .animate-box {
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-  }
-
-  .animate-box.visible {
-    opacity: 1;
-  }
-</style>
-
-<!-- JavaScript to add animation visibility -->
-<script>
-  window.addEventListener('scroll', function() {
-    let elements = document.querySelectorAll('.animate-box');
-    elements.forEach(function(element) {
-      if (element.getBoundingClientRect().top < window.innerHeight) {
-        element.classList.add('visible');
-      }
-    });
-  });
-</script>
-
-	
     <section class="ftco-section ftco-project" id="projects-section">
 		<div class="container">
 			<div class="row justify-content-center pb-5">
@@ -518,20 +393,7 @@
 		</div>
 	</section>
 
-    <section class="ftco-section" id="blog-section">
-      <div class="container">
-        <div class="row justify-content-center mb-5 pb-5">
-          <div class="col-md-7 heading-section text-center ftco-animate">
-            <h1 class="big big-2">Blog</h1>
-            <h2 class="mb-4">Our Blog</h2>
-           
-          </div>
-        </div>
-        
-          </div>
-        </div>
-      </div>
-    </section>
+    
 
     <section class="ftco-section ftco-no-pt ftco-no-pb ftco-counter img" id="section-counter">
     <div class="container">
