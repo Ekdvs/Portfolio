@@ -27,6 +27,29 @@
       --radius:16px;
       --shadow:0 10px 30px rgba(0,0,0,.35);
     }
+	.project {
+  position: relative;
+    background-image: var(--img);
+  border-radius: 12px;
+  overflow: hidden;
+  color: #fff;
+  min-height: 280px; /* ensure it has height */
+  display: flex;
+  align-items: flex-end;
+}
+
+.project .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+
+.project .content {
+  position: relative;
+  padding: 1rem;
+  z-index: 1;
+}
+
 
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -247,13 +270,14 @@
     <div class="row g-4">
       <!-- Weather App -->
       <div class="col-md-6" data-aos="zoom-in">
-        <article class="project" style="--img:url(images/weather-hero.jpg)">
+        <article class="project" style="--img:url('images/weather-hero.jpg')">
           <div class="overlay"></div>
           <div class="content">
             <h3><a class="link-light" href="https://ekdvs-wearther-apps.netlify.app/" target="_blank" rel="noopener">Weather Forecast Web App</a></h3>
             <span>React, TypeScript, OpenWeather API</span>
             <p class="mt-2 mb-2 muted">City search, group fetch by IDs, coordinate routing, 5‑day forecast carousel, hourly cards, React Query caching, responsive cards. Deployed on Netlify.</p>
             <a class="btn btn-sm btn-brand" href="https://ekdvs-wearther-apps.netlify.app/" target="_blank" rel="noopener">View Site</a>
+			<img  style="width: 100%; height: 200px; object-fit: cover; display: block;" src="images/weather-hero.jpg">
           </div>
         </article>
       </div>
@@ -267,13 +291,14 @@
             <span>PHP, MySQL, PHPMailer</span>
             <p class="mt-2 mb-2 muted">User registration & login, booking management, email notifications (PHPMailer), and admin basics. Built with PHP & MySQL (XAMPP).</p>
             <a class="btn btn-sm btn-outline-brand" href="https://weddingplaning.rf.gd/" target="_blank" rel="noopener">View Site</a>
+			<img style="width: 100%; height: 200px; object-fit: cover; display: block;"src="images/wedding-planner.jpg">
           </div>
         </article>
       </div>
 
       <!-- The Ceylon Traveler -->
       <div class="col-md-6" data-aos="zoom-in">
-        <article class="project" style="--img:url(images/travel-planner2.jpg)">
+        <article class="project" style="background-image: url('images/travel-planner2.jpg');">
           <div class="overlay"></div>
           <div class="content">
             <h3>The Ceylon Traveler</h3>
@@ -281,9 +306,11 @@
             <p class="mt-2 mb-2 muted">Package booking, guides, payments, and user accounts. Hosted on Vercel/Netlify stack.</p>
             <div class="d-flex gap-2 flex-wrap">
               <a class="btn btn-sm btn-outline-brand" href="#" target="_blank" rel="noopener">Preview</a>
-            </div>
-          </div>
-        </article>
+           
+		  <img style="width: 100%; height: 200px; object-fit: cover; display: block;" src="images/travel-planner2.jpeg">
+        
+		 </div>
+          </div></article>
       </div>
 
       <!-- Rent a Car -->
@@ -294,6 +321,7 @@
             <h3>Rent‑a‑Car Service Management</h3>
             <span>Windows Forms • C# & SQL</span>
             <p class="mt-2 mb-0 muted">Vehicle rentals, customer management, returns tracking, and billing features.</p>
+			<img style="width: 100%; height: 200px; object-fit: cover; display: block;"src="images/rent-car.jpg">
           </div>
         </article>
       </div>
@@ -306,16 +334,18 @@
             <h3>Online Flower Selling</h3>
             <span>HTML, CSS, JavaScript, PHP</span>
             <p class="mt-2 mb-0 muted">Product listings, orders, and basic admin using PHP.</p>
+			<img style="width: 100%; height: 200px; object-fit: cover; display: block;"src="images/flower-shop.jpg">
           </div>
         </article>
       </div>
       <div class="col-md-6" data-aos="zoom-in" data-aos-delay="50">
-        <article class="project" style="--img:url(images/taxi-service.jpg)">
+        <article class="project" style="img:url(images/taxi-service.jpg)">
           <div class="overlay"></div>
           <div class="content">
             <h3>Taxi Car Service Management</h3>
             <span>Java & SQL</span>
             <p class="mt-2 mb-0 muted">Ride management, drivers, and simple reporting.</p>
+			<img style="width: 100%; height: 200px; object-fit: cover; display: block;"src="images/taxi-service.jpg">
           </div>
         </article>
       </div>
