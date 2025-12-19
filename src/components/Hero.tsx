@@ -15,7 +15,7 @@ const Hero: React.FC = () => {
       className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16"
     >
       {/* Background Image */}
-      <div className="absolute inset-0 bg-[url('image.png')] bg-cover bg-center opacity-10" />
+      <div className="absolute inset-0 bg-[url('/image.png')] bg-cover bg-center opacity-10" />
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
