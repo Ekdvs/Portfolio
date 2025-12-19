@@ -47,9 +47,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <img
           src={project.image[currentIndex]}
           alt={`${project.title} screenshot ${currentIndex + 1}`}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110 transition-transform duration-300"
-          loading="lazy"
-        />
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+
+          <div className="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
         {/* Navigation Buttons */}
         {totalImages > 1 && (
