@@ -1,3 +1,7 @@
+// src/types/index.ts
+import type { LucideIcon } from 'lucide-react';
+import type {  ElementType } from 'react';
+
 export interface Project {
   id: number;
   title: string;
@@ -16,11 +20,12 @@ export interface Skill {
 }
 
 export interface Service {
-  icon: React.ReactNode;
+  icon: LucideIcon; // ✅ type-only import
   title: string;
   description: string;
 }
 
+// Contact form structure
 export interface ContactForm {
   name: string;
   email: string;
@@ -28,8 +33,9 @@ export interface ContactForm {
   message: string;
 }
 
+// Social links: use ElementType for React component icons
 export interface SocialLink {
   name: string;
   url: string;
-  icon: React.ReactNode;
+  icon: ElementType; // ✅ React component like LucideIcon
 }
