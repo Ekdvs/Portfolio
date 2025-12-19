@@ -43,7 +43,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection = 'home' }) => {
             onClick={() => scrollToSection('home')}
             className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent"
           >
-            Vishwa
+            Vishwa Sampath
           </button>
           
           {/* Desktop Menu */}
