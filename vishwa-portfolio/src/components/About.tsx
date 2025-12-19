@@ -4,7 +4,7 @@ import type { Service } from '../types';
 
 interface AboutProps {
   services: Service[];
-  profileImage: string; // URL of your profile image
+  profileImage: string;
 }
 
 const About: React.FC<AboutProps> = ({ services, profileImage }) => {
@@ -16,65 +16,65 @@ const About: React.FC<AboutProps> = ({ services, profileImage }) => {
   ];
 
   return (
-    <section id="about" className="py-20 bg-slate-900/50">
+    <section id="about" className="py-20 bg-gradient-to-b from-slate-900 to-slate-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+        <h2 className="text-4xl sm:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
           About Me
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Profile Image */}
-          <div className="flex justify-center md:justify-end">
-            <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg transform hover:scale-105 transition-transform duration-300">
+        <div className="flex flex-col md:flex-row gap-12 items-center md:items-start">
+          {/* Left - Profile Image */}
+          <div className="flex justify-center md:justify-end w-full md:w-1/2">
+            <div className="relative w-56 h-56 sm:w-64 sm:h-64 rounded-full overflow-hidden border-4 border-blue-500 shadow-2xl transform hover:scale-105 transition-transform duration-500">
               <img
                 src={profileImage}
                 alt="Vishwa Sampath"
                 className="w-full h-full object-cover"
               />
+              <div className="absolute inset-0 bg-blue-500/20 rounded-full animate-pulse"></div>
             </div>
           </div>
 
-          {/* Right Column - About Text & Services */}
-          <div className="space-y-6">
+          {/* Right - Text & Services */}
+          <div className="w-full md:w-1/2 space-y-6">
             {/* About Text */}
-            <p className="text-gray-300 text-lg leading-relaxed">
-              I'm a passionate Full-Stack Developer with expertise in building scalable, 
-              production-ready web applications. Currently pursuing B.Sc. in Physical Sciences 
-              with a focus on Computer Science at the University of Kelaniya.
-            </p>
+            <div className="space-y-4">
+              <p className="text-gray-300 text-lg leading-relaxed">
+                I'm a passionate Full-Stack Developer building scalable, production-ready web apps.
+                Currently pursuing B.Sc. in Physical Sciences with a focus on Computer Science.
+              </p>
+              <p className="text-gray-300 text-lg leading-relaxed">
+                I specialize in the MERN stack, Spring Boot, and real-time applications with Socket.io.
+                Experienced with cloud deployment, REST APIs, JWT authentication, and modern DevOps.
+              </p>
+            </div>
 
-            <p className="text-gray-300 text-lg leading-relaxed">
-              I specialize in the MERN stack, Spring Boot, and real-time applications using Socket.io. 
-              I have hands-on experience with cloud deployment, REST APIs, JWT authentication, 
-              and modern DevOps practices.
-            </p>
-
-            {/* Contact Info Grid */}
-            <div className="grid grid-cols-2 gap-4 pt-4">
-              {contactInfo.map((info, index) => (
-                <div key={index} className="space-y-2">
-                  <div className="flex items-center gap-2 text-gray-400">
-                    <info.icon size={20} className="text-blue-400" />
-                    <span className="text-sm">{info.label}</span>
+            {/* Contact Info */}
+            <div className="grid grid-cols-2 gap-4">
+              {contactInfo.map((info, i) => (
+                <div key={i} className="flex flex-col gap-1 bg-slate-800/50 p-4 rounded-xl border border-blue-500/20 hover:border-blue-500/50 transition-all duration-300">
+                  <div className="flex items-center gap-2 text-blue-400">
+                    <info.icon size={20} />
+                    <span className="text-gray-200 font-medium">{info.label}</span>
                   </div>
-                  <p className="text-white text-sm break-all">{info.value}</p>
+                  <p className="text-gray-300 text-sm break-all">{info.value}</p>
                 </div>
               ))}
             </div>
 
-            {/* Services Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
-              {services.map((service, index) => {
-                const IconServiceComponent = service.icon;
+            {/* Services */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6">
+              {services.map((service, i) => {
+                const IconService = service.icon;
                 return (
                   <div
-                    key={index}
-                    className="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300 hover:scale-105"
+                    key={i}
+                    className="bg-gradient-to-br from-slate-800/70 to-slate-900/70 backdrop-blur-md p-6 rounded-3xl border border-blue-500/20 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-500"
                   >
                     <div className="text-blue-400 mb-4">
-                      <IconServiceComponent size={32} />
+                      <IconService size={36} />
                     </div>
-                    <h3 className="font-semibold mb-2">{service.title}</h3>
+                    <h3 className="text-white font-semibold text-lg mb-2">{service.title}</h3>
                     <p className="text-gray-400 text-sm">{service.description}</p>
                   </div>
                 );

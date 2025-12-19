@@ -10,8 +10,8 @@ const Skills: React.FC<SkillsProps> = ({ skills }) => {
   const stats = [
     { number: "5+", label: "Major Projects" },
     { number: "3", label: "Hackathons" },
-    { number: "10+", label: "Certifications" },
-    { number: "2", label: "Research Papers" }
+    { number: "6+", label: "Certifications" },
+    { number: "0", label: "Research Papers" }
   ];
 
   return (

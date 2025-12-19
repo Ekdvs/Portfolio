@@ -66,7 +66,7 @@ const Hero: React.FC = () => {
               View Projects
             </a>
             <a
-              href="/cv/vishwacv.pdf"
+              href="\vishwa_sampath_SE.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-3 border-2 border-blue-500 rounded-full font-semibold hover:bg-blue-500/10 transition-all duration-300"

@@ -43,7 +43,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   return (
     <article className="group relative bg-slate-800 rounded-2xl overflow-hidden border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300">
       {/* Carousel */}
-      <div className="relative h-48">
+      <div className="relative h-[250px]">
         <img
           src={project.image[currentIndex]}
           alt={`${project.title} screenshot ${currentIndex + 1}`}
