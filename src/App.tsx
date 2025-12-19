@@ -23,7 +23,7 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-white">
       <Navbar />
       <Hero />
-      <About services={services}  profileImage="/vishwa.png"/>
+      <About services={services}  profileImage="vishwa.png"/>
       <Projects projects={projects} />
       <Skills skills={skills} />
       <Contact />
