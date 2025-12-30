@@ -17,8 +17,8 @@ export const projects: Project[] = [
     title: "Online computer shop Web ",
     tech: "MERN Stack | Socket.io | payHere",
     description: "Full-stack e-commerce platform with real-time notifications, JWT authentication, secure payhere payments, and order tracking. Frontend deployed on Vercel, backend on Render with MongoDB Atlas.",
-    image: ["de.png","de.png","de.png"],
-    liveLink: "#",
+    image: ["cs1.png","cs2.png","cs3.png","cs4.png"],
+    liveLink: "https://computer.ekdvs.xyz/",
     githubLink: ["https://github.com/Ekdvs/i-computers-frontend","https://github.com/Ekdvs/i-computers-backend"],
     category: "fullstack"
   },
