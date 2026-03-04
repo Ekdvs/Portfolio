@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
 import type { ContactForm } from '../types';
-
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState<ContactForm>({
@@ -26,23 +26,28 @@ const Contact: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      alert('Message sent successfully! (Demo mode - integrate with your backend)');
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setIsSubmitting(false);
-    }, 1000);
+    try {
+      await emailjs.send(
+        'service_j8idtx5',        // ✅ Your Service ID
+        'template_48295zp',       // 🔁 Replace with your template ID
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        },
+        'YSYWsuu35oGdy4tMB'         // 🔁 Replace with your public key
+      );
 
-    // TODO: Replace with actual API call
-    // try {
-    //   await fetch('/api/contact', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(formData)
-    //   });
-    // } catch (error) {
-    //   console.error('Error:', error);
-    // }
+      alert('Message sent successfully!');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+
+    } catch (error) {
+      console.error(error);
+      alert('Failed to send message.');
+    }
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -61,7 +66,8 @@ const Contact: React.FC = () => {
               </p>
             </div>
 
-            <div className="space-y-6">
+            {/* ✅ Only added form tag, design unchanged */}
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <input
                   type="text"
@@ -104,13 +110,14 @@ const Contact: React.FC = () => {
               />
               
               <button
-                onClick={handleSubmit}
+                type="submit"
                 disabled={isSubmitting}
                 className="w-full py-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
-            </div>
+            </form>
+
           </div>
         </div>
       </div>
