@@ -44,6 +44,25 @@ export const projects: Project[] = [
   },
   {
     id: 5,
+    title: "travel experience providers",
+    tech: "Next.js | MERN Stack | TypeScript | node.js | express",
+    description: "A full-stack web application where travel experience providers can register, publish their listings, and travelers can discover unique local experiences.",
+    image: ["te1.png","te2.png","te3.png","te4.png","te5.png"],
+    liveLink: "https://travel-experience-platform.vercel.app",
+    githubLink: "https://github.com/Ekdvs/travel-experience-platform",
+    category: "fullstack"
+  },{
+    id: 6,
+    title: "Notes App",
+    tech: "React | MERN Stack | TypeScript | node.js | express",
+    description: "A full-stack collaborative notes application built with Node.js + Express + MongoDB on the backend and React + TypeScript + Tailwind CSS on the frontend. Users can create, edit, delete, pin, and search notes — and invite collaborators with role-based access.",
+    image: ["n1.png","n2.png","n3.png","n4.png","n5.png","n6.png"],
+    liveLink: "",
+    githubLink: "https://github.com/Ekdvs/Collaborative-Note-Taking-Web-App.git",
+    category: "fullstack"
+  },
+  {
+    id: 7,
     title: "Wedding Planning - Emerald Weddings",
     tech: "PHP | MySQL | PHPMailer",
     description: "Complete wedding planning solution with user registration, booking management, automated email notifications via PHPMailer, and admin dashboard built with PHP & MySQL.",
@@ -53,7 +72,7 @@ export const projects: Project[] = [
     category: "web"
   },
   {
-    id: 6,
+    id: 8,
     title: "Rent-a-Car Service Management",
     tech: "C# | SQL Server | Windows Forms",
     description: "Desktop application for vehicle rental management with customer tracking, vehicle inventory, rental returns processing, and comprehensive billing system.",
@@ -63,7 +82,7 @@ export const projects: Project[] = [
     category: "fullstack"
   },
   {
-    id: 7,
+    id: 9,
     title: "Online Flower Selling",
     tech: "HTML | CSS | JavaScript | PHP",
     description: "E-commerce platform for flower shop with product listings, shopping cart functionality, order management, and basic admin panel using PHP and MySQL.",
@@ -73,7 +92,7 @@ export const projects: Project[] = [
     category: "web"
   },
   {
-    id: 8,
+    id: 10,
     title: "Libary Management Service Management",
     tech: "C# | SQL Server |  Windows Forms",
     description: "Desktop application for vehicle rental management with customer tracking, vehicle inventory, rental returns processing, and comprehensive billing system.",
