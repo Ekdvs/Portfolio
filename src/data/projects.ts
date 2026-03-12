@@ -51,7 +51,8 @@ export const projects: Project[] = [
     liveLink: "https://travel-experience-platform.vercel.app",
     githubLink: "https://github.com/Ekdvs/travel-experience-platform",
     category: "fullstack"
-  },{
+  },
+  {
     id: 6,
     title: "Notes App",
     tech: "React | MERN Stack | TypeScript | node.js | express",
@@ -63,6 +64,16 @@ export const projects: Project[] = [
   },
   {
     id: 7,
+    title: "TaskFlow Manager",
+    tech: "Next.js | Spring Boot | MySQL | TypeScript | Tailwind CSS | JWT",
+    description: "A full-stack Mini Task Management System built with Next.js (frontend) and Spring Boot (backend), using MySQL as the database. Supports JWT authentication, role-based access control, and full CRUD task management.",
+    image: ["nt1.png","nt2.png","nt3.png","nt4.png","nt5.png"],
+    liveLink: "",
+    githubLink: "https://github.com/Ekdvs/TaskManager.git",
+    category: "fullstack"
+  },
+  {
+    id: 8,
     title: "Wedding Planning - Emerald Weddings",
     tech: "PHP | MySQL | PHPMailer",
     description: "Complete wedding planning solution with user registration, booking management, automated email notifications via PHPMailer, and admin dashboard built with PHP & MySQL.",
@@ -72,7 +83,7 @@ export const projects: Project[] = [
     category: "web"
   },
   {
-    id: 8,
+    id: 9,
     title: "Rent-a-Car Service Management",
     tech: "C# | SQL Server | Windows Forms",
     description: "Desktop application for vehicle rental management with customer tracking, vehicle inventory, rental returns processing, and comprehensive billing system.",
@@ -82,7 +93,7 @@ export const projects: Project[] = [
     category: "fullstack"
   },
   {
-    id: 9,
+    id: 10,
     title: "Online Flower Selling",
     tech: "HTML | CSS | JavaScript | PHP",
     description: "E-commerce platform for flower shop with product listings, shopping cart functionality, order management, and basic admin panel using PHP and MySQL.",
@@ -92,7 +103,7 @@ export const projects: Project[] = [
     category: "web"
   },
   {
-    id: 10,
+    id: 11,
     title: "Libary Management Service Management",
     tech: "C# | SQL Server |  Windows Forms",
     description: "Desktop application for vehicle rental management with customer tracking, vehicle inventory, rental returns processing, and comprehensive billing system.",
