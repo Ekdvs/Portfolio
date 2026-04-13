@@ -1,6 +1,5 @@
 import type { Project } from "../types";
 
-
 export const projects: Project[] = [
   {
     id: 1,
@@ -16,7 +15,7 @@ export const projects: Project[] = [
     id: 2,
     title: "Online computer shop Web ",
     tech: "MERN Stack | Socket.io | payHere",
-    description: "Full-stack e-commerce platform with real-time notifications, JWT authentication, secure payhere payments, and order tracking. Frontend deployed on Vercel, backend on Render with MongoDB Atlas.",
+    description: "Full-stack e-commerce platform with real-time notifications, JWT authentication, secure payhere payments, and order tracking.",
     image: ["cs1.png","cs2.png","cs3.png","cs4.png"],
     liveLink: "https://computer.ekdvs.xyz/",
     githubLink: ["https://github.com/Ekdvs/i-computers-frontend","https://github.com/Ekdvs/i-computers-backend"],
@@ -26,7 +25,7 @@ export const projects: Project[] = [
     id: 3,
     title: "Weather Forecast Web App",
     tech: "React | TypeScript | OpenWeather API",
-    description: "Real-time weather application with city search, 5-day forecast carousel, hourly weather cards, React Query caching, and fully responsive design. Deployed on Netlify.",
+    description: "Real-time weather app with city search, forecasts, caching, and responsive UI.",
     image: ["wa1.png","wa2.png","wa3.png"],
     liveLink: "https://wearther-app-three.vercel.app/",
     githubLink: "https://github.com/Ekdvs/wearther-app",
@@ -36,7 +35,7 @@ export const projects: Project[] = [
     id: 4,
     title: "The Ceylon Traveler",
     tech: "React | Spring Boot | MongoDB",
-    description: "Comprehensive travel planning platform with package booking, tour guides, secure payment gateway integration, and complete user account management system.",
+    description: "Travel planning platform with booking, guides, payments, and account management.",
     image: ["t1.png","t2.png","t3.png"],
     liveLink: "https://ceylon-travelernetlifyapp.vercel.app/",
     githubLink: ["https://github.com/Ekdvs/Tour-Reservation-frontend","https://github.com/Ekdvs/online-travel-planning"],
@@ -45,8 +44,8 @@ export const projects: Project[] = [
   {
     id: 5,
     title: "travel experience providers",
-    tech: "Next.js | MERN Stack | TypeScript | node.js | express",
-    description: "A full-stack web application where travel experience providers can register, publish their listings, and travelers can discover unique local experiences.",
+    tech: "Next.js | MERN Stack | TypeScript",
+    description: "Platform for publishing and discovering local travel experiences.",
     image: ["te1.png","te2.png","te3.png","te4.png","te5.png"],
     liveLink: "https://travel-experience-platform.vercel.app",
     githubLink: "https://github.com/Ekdvs/travel-experience-platform",
@@ -55,8 +54,8 @@ export const projects: Project[] = [
   {
     id: 6,
     title: "Notes App",
-    tech: "React | MERN Stack | TypeScript | node.js | express",
-    description: "A full-stack collaborative notes application built with Node.js + Express + MongoDB on the backend and React + TypeScript + Tailwind CSS on the frontend. Users can create, edit, delete, pin, and search notes — and invite collaborators with role-based access.",
+    tech: "React | MERN Stack | TypeScript",
+    description: "Collaborative notes app with CRUD, search, pinning, and role-based access.",
     image: ["n1.png","n2.png","n3.png","n4.png","n5.png","n6.png"],
     liveLink: "",
     githubLink: "https://github.com/Ekdvs/Collaborative-Note-Taking-Web-App.git",
@@ -65,51 +64,76 @@ export const projects: Project[] = [
   {
     id: 7,
     title: "TaskFlow Manager",
-    tech: "Next.js | Spring Boot | MySQL | TypeScript | Tailwind CSS | JWT",
-    description: "A full-stack Mini Task Management System built with Next.js (frontend) and Spring Boot (backend), using MySQL as the database. Supports JWT authentication, role-based access control, and full CRUD task management.",
+    tech: "Next.js | Spring Boot | MySQL | JWT",
+    description: "Task management system with authentication and role-based access.",
     image: ["nt1.png","nt2.png","nt3.png","nt4.png","nt5.png"],
     liveLink: "",
     githubLink: "https://github.com/Ekdvs/TaskManager.git",
     category: "fullstack"
   },
+
+  
   {
     id: 8,
+    title: "Product Manager",
+    tech: "Next.js | Tailwind CSS | TypeScript | Local Storage | Zod | Framer Motion",
+    description: "A clean and responsive product management app with full CRUD functionality using localStorage. Includes search, dark mode, validation, and smooth UI animations.",
+    image: ["pm1.png","pm2.png","pm3.png","pm4.png"],
+    liveLink: "",
+    githubLink: "https://github.com/Ekdvs/product-management",
+    category: "web"
+  },
+
+ 
+  {
+    id: 9,
+    title: "FeedPulse - AI Feedback Platform",
+    tech: "Next.js | Express | MongoDB | Google Gemini | Docker | TypeScript",
+    description: "Full-stack AI-powered feedback management system where users submit feedback and Google Gemini automatically analyzes sentiment, priority, categories, and summaries. Includes JWT-auth admin dashboard, analytics charts, and Dockerized deployment.",
+    image: ["fp1.png","fp2.png","fp3.png","fp4.png","fp5.png"],
+    liveLink: "",
+    githubLink: "https://github.com/Ekdvs/feedpulse",
+    category: "fullstack"
+  },
+
+  {
+    id: 10,
     title: "Wedding Planning - Emerald Weddings",
     tech: "PHP | MySQL | PHPMailer",
-    description: "Complete wedding planning solution with user registration, booking management, automated email notifications via PHPMailer, and admin dashboard built with PHP & MySQL.",
+    description: "Wedding planning system with booking, email notifications, and admin dashboard.",
     image: ["w1.png","w2.png","w3.png","w4.png"],
     liveLink: "https://weddingplaning.rf.gd/",
     githubLink: "https://github.com/Ekdvs/Emerald-Weddings",
     category: "web"
   },
   {
-    id: 9,
+    id: 11,
     title: "Rent-a-Car Service Management",
     tech: "C# | SQL Server | Windows Forms",
-    description: "Desktop application for vehicle rental management with customer tracking, vehicle inventory, rental returns processing, and comprehensive billing system.",
+    description: "Desktop system for vehicle rental, inventory, and billing.",
     image: ["c1.png"],
     liveLink: "#",
     githubLink: "https://github.com/Ekdvs",
     category: "fullstack"
   },
   {
-    id: 10,
+    id: 12,
     title: "Online Flower Selling",
     tech: "HTML | CSS | JavaScript | PHP",
-    description: "E-commerce platform for flower shop with product listings, shopping cart functionality, order management, and basic admin panel using PHP and MySQL.",
+    description: "Flower shop platform with cart and order management.",
     image: ["f1.png"],
     liveLink: "#",
     githubLink: "https://github.com/Ekdvs/lilylane",
     category: "web"
   },
   {
-    id: 11,
-    title: "Libary Management Service Management",
-    tech: "C# | SQL Server |  Windows Forms",
-    description: "Desktop application for vehicle rental management with customer tracking, vehicle inventory, rental returns processing, and comprehensive billing system.",
+    id: 13,
+    title: "Library Management System",
+    tech: "C# | SQL Server | Windows Forms",
+    description: "Library system with inventory and user tracking.",
     image: ["l1.png"],
     liveLink: "#",
     githubLink: "https://github.com/Ekdvs/Library-Management-System",
     category: "fullstack"
-  },
+  }
 ];
