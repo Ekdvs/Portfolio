@@ -2,7 +2,20 @@ import type { Project } from "../types";
 
 export const projects: Project[] = [
   {
-    id: 1,
+  id: 1,
+  title: "Ticket Booking System (MyTickets)",
+  tech: "React | TypeScript | Spring Boot | MongoDB | JWT | PayHere | Docker",
+  description: "Full-stack event ticket booking platform with multi-role dashboards (User, Organizer, Admin), secure JWT & Google OAuth authentication, PayHere payment integration, QR-based ticket validation, PDF ticket generation, and real-time notifications. Deployed frontend on Vercel and backend on Render with MongoDB Atlas and Cloudinary storage.",
+  image: ["ticket1.png","ticket2.png","ticket3.png","ticket4.png"],
+  liveLink: "https://project-qt6jb.vercel.app/",
+  githubLink: [
+    "https://github.com/Ekdvs/My-Ticket-BOOKING",
+    "https://github.com/Ekdvs/ticketing-system-backend"
+  ],
+  category: "fullstack"
+},
+  {
+    id: 2,
     title: "Online Shopping Web App",
     tech: "MERN Stack | Socket.io | Stripe",
     description: "Full-stack e-commerce platform with real-time notifications, JWT authentication, secure Stripe payments, and order tracking. Frontend deployed on Vercel, backend on Render with MongoDB Atlas.",
@@ -12,7 +25,7 @@ export const projects: Project[] = [
     category: "fullstack"
   },
   {
-    id: 2,
+    id: 3,
     title: "Online computer shop Web ",
     tech: "MERN Stack | Socket.io | payHere",
     description: "Full-stack e-commerce platform with real-time notifications, JWT authentication, secure payhere payments, and order tracking.",
@@ -22,7 +35,7 @@ export const projects: Project[] = [
     category: "fullstack"
   },
   {
-    id: 3,
+    id: 4,
     title: "Weather Forecast Web App",
     tech: "React | TypeScript | OpenWeather API",
     description: "Real-time weather app with city search, forecasts, caching, and responsive UI.",
@@ -32,7 +45,7 @@ export const projects: Project[] = [
     category: "web"
   },
   {
-    id: 4,
+    id: 5,
     title: "The Ceylon Traveler",
     tech: "React | Spring Boot | MongoDB",
     description: "Travel planning platform with booking, guides, payments, and account management.",
@@ -42,7 +55,7 @@ export const projects: Project[] = [
     category: "fullstack"
   },
   {
-    id: 5,
+    id: 6,
     title: "travel experience providers",
     tech: "Next.js | MERN Stack | TypeScript",
     description: "Platform for publishing and discovering local travel experiences.",
@@ -52,7 +65,7 @@ export const projects: Project[] = [
     category: "fullstack"
   },
   {
-    id: 6,
+    id: 7,
     title: "Notes App",
     tech: "React | MERN Stack | TypeScript",
     description: "Collaborative notes app with CRUD, search, pinning, and role-based access.",
@@ -62,7 +75,7 @@ export const projects: Project[] = [
     category: "fullstack"
   },
   {
-    id: 7,
+    id: 8,
     title: "TaskFlow Manager",
     tech: "Next.js | Spring Boot | MySQL | JWT",
     description: "Task management system with authentication and role-based access.",
@@ -74,7 +87,7 @@ export const projects: Project[] = [
 
   
   {
-    id: 8,
+    id: 9,
     title: "Product Manager",
     tech: "Next.js | Tailwind CSS | TypeScript | Local Storage | Zod | Framer Motion",
     description: "A clean and responsive product management app with full CRUD functionality using localStorage. Includes search, dark mode, validation, and smooth UI animations.",
@@ -86,7 +99,7 @@ export const projects: Project[] = [
 
  
   {
-    id: 9,
+    id: 10,
     title: "FeedPulse - AI Feedback Platform",
     tech: "Next.js | Express | MongoDB | Google Gemini | Docker | TypeScript",
     description: "Full-stack AI-powered feedback management system where users submit feedback and Google Gemini automatically analyzes sentiment, priority, categories, and summaries. Includes JWT-auth admin dashboard, analytics charts, and Dockerized deployment.",
@@ -97,7 +110,7 @@ export const projects: Project[] = [
   },
 
   {
-    id: 10,
+    id: 11,
     title: "Wedding Planning - Emerald Weddings",
     tech: "PHP | MySQL | PHPMailer",
     description: "Wedding planning system with booking, email notifications, and admin dashboard.",
@@ -107,7 +120,7 @@ export const projects: Project[] = [
     category: "web"
   },
   {
-    id: 11,
+    id: 12,
     title: "Rent-a-Car Service Management",
     tech: "C# | SQL Server | Windows Forms",
     description: "Desktop system for vehicle rental, inventory, and billing.",
@@ -117,7 +130,7 @@ export const projects: Project[] = [
     category: "fullstack"
   },
   {
-    id: 12,
+    id: 13,
     title: "Online Flower Selling",
     tech: "HTML | CSS | JavaScript | PHP",
     description: "Flower shop platform with cart and order management.",
@@ -127,7 +140,7 @@ export const projects: Project[] = [
     category: "web"
   },
   {
-    id: 13,
+    id: 14,
     title: "Library Management System",
     tech: "C# | SQL Server | Windows Forms",
     description: "Library system with inventory and user tracking.",
