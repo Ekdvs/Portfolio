@@ -14,6 +14,9 @@ const ai = new GoogleGenAI({
   apiKey: import.meta.env.VITE_GEMINI_API_KEY,
 });
 
+/* =========================
+   STREAM SIMULATION
+========================= */
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function streamText(text: string, cb: (t: string) => void) {
@@ -27,11 +30,17 @@ async function streamText(text: string, cb: (t: string) => void) {
   }
 }
 
+/* =========================
+   MAIN HOOK
+========================= */
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  /* =========================
+     SEND MESSAGE
+  ========================= */
   const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || isLoading) return;
 
@@ -48,17 +57,17 @@ export function useChat() {
 
     try {
       /* =========================
-         🔍 STEP 1: FIND PROJECTS
+         PROJECT SEARCH
       ========================= */
       const matchedProjects = searchProjects(text);
 
       /* =========================
-         🧠 STEP 2: BUILD CONTEXT
+         BUILD PROMPT
       ========================= */
       const prompt = buildAIContext(text, matchedProjects);
 
       /* =========================
-         🤖 GEMINI CALL
+         GEMINI CALL
       ========================= */
       const response = await ai.models.generateContent({
         model: "gemini-3.5-flash",
@@ -68,7 +77,7 @@ export function useChat() {
       const aiText = response.text || "No response";
 
       /* =========================
-         💬 STREAM OUTPUT
+         ADD EMPTY AI MESSAGE FIRST
       ========================= */
       const assistantId = crypto.randomUUID();
 
@@ -82,6 +91,9 @@ export function useChat() {
         },
       ]);
 
+      /* =========================
+         STREAM OUTPUT
+      ========================= */
       await streamText(aiText, (val) => {
         setMessages((prev) =>
           prev.map((m) =>
@@ -96,10 +108,19 @@ export function useChat() {
     }
   }, [isLoading]);
 
+  /* =========================
+     CLEAR CHAT (FIX FOR YOUR ERROR)
+  ========================= */
+  const clearMessages = useCallback(() => {
+    setMessages([]);
+    setError(null);
+  }, []);
+
   return {
     messages,
     isLoading,
     error,
     sendMessage,
+    clearMessages, 
   };
 }
