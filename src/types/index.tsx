@@ -33,7 +33,7 @@ export interface ContactForm {
   message: string;
 }
 
-// Social links: use ElementType for React component icons
+
 export interface SocialLink {
   name: string;
   url: string;
