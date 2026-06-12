@@ -7,7 +7,7 @@ import React from 'react';
 import { projects } from './data/projects';
 import { skills } from './data/skills';
 import { services } from './data/services';
-import Navbar from './components/Navbar,';
+import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
@@ -15,6 +15,9 @@ import Skills from './components/Skills';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ChatbotWidget from './components/Chatbot/ChatbotWidget';
+import Certificates from './components/Certificates';
+import { certificates } from './data/certificates';
+
 
 
 
@@ -26,6 +29,7 @@ const App: React.FC = () => {
   <Hero />
   <About services={services} profileImage="vishwa.png" />
   <Projects projects={projects} />
+  <Certificates certificates={certificates} />
   <Skills skills={skills} />
   <Contact />
   <Footer />

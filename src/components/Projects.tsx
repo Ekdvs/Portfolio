@@ -1,12 +1,16 @@
+// src/components/Projects.tsx
 import React, { useState } from 'react';
 import { ExternalLink, Github, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Project } from '../types';
+import ProjectModal from './ProjectModal';
 
 interface ProjectsProps {
   projects: Project[];
 }
 
 const Projects: React.FC<ProjectsProps> = ({ projects }) => {
+  const [selected, setSelected] = useState<Project | null>(null);
+
   return (
     <section id="projects" className="py-20 bg-slate-900/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,54 +20,69 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
 
         <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard key={project.id} project={project} onOpen={setSelected} />
           ))}
         </div>
       </div>
+
+      <ProjectModal project={selected} onClose={() => setSelected(null)} />
     </section>
   );
 };
 
 interface ProjectCardProps {
   project: Project;
+  onOpen: (project: Project) => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, onOpen }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const totalImages = project.image.length;
 
-  const prevImage = () => {
+  const prevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setCurrentIndex((prev) => (prev === 0 ? totalImages - 1 : prev - 1));
   };
 
-  const nextImage = () => {
+  const nextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setCurrentIndex((prev) => (prev === totalImages - 1 ? 0 : prev + 1));
   };
 
   return (
-    <article className="group relative bg-slate-800 rounded-2xl overflow-hidden border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300">
+    <article
+      onClick={() => onOpen(project)}
+      className="group relative bg-slate-800 rounded-2xl overflow-hidden border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300 cursor-pointer"
+    >
       {/* Carousel */}
-      <div className="relative h-[250px] ">
+      <div className="relative h-[250px]">
         <img
           src={project.image[currentIndex]}
           alt={`${project.title} screenshot ${currentIndex + 1}`}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
+        />
 
-          <div className="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-        {/* Navigation Buttons */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="px-4 py-2 rounded-full border border-white/20 bg-black/40 backdrop-blur-sm text-white text-sm font-medium">
+            View Project
+          </span>
+        </div>
+
+        {/* Navigation */}
         {totalImages > 1 && (
           <>
             <button
               onClick={prevImage}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors z-10"
             >
               <ChevronLeft size={20} />
             </button>
+
             <button
               onClick={nextImage}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors z-10"
             >
               <ChevronRight size={20} />
             </button>
@@ -82,50 +101,47 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <p className="text-gray-300 mb-4">{project.description}</p>
 
         {/* Links */}
-        <div className="flex gap-4">
-        {project.liveLink && project.liveLink !== '#' && (
+        <div className="flex gap-4" onClick={(e) => e.stopPropagation()}>
+          {project.liveLink && project.liveLink !== '#' && (
             <a
-            href={project.liveLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
+              href={project.liveLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
             >
-            <ExternalLink size={16} />
-            Live Demo
+              <ExternalLink size={16} />
+              Live Demo
             </a>
-        )}
+          )}
 
-        {project.githubLink &&
-            (Array.isArray(project.githubLink)
-            ? project.githubLink.map((link, idx) => (
+          {project.githubLink &&
+            (Array.isArray(project.githubLink) ? (
+              project.githubLink.map((link, idx) => (
                 <a
-                    key={idx}
-                    href={link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+                  key={idx}
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
                 >
-                    <Github size={16} />
-                    {idx === 0 ? 'Frontend' : 'Backend'}
+                  <Github size={16} />
+                  {idx === 0 ? 'Frontend' : 'Backend'}
                 </a>
-                ))
-            : (
-                <a
+              ))
+            ) : (
+              <a
                 href={project.githubLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
-                >
+              >
                 <Github size={16} />
                 Code
-                </a>
-            )
-            )
-        }
+              </a>
+            ))}
         </div>
 
-
-        {/* Dots Indicator */}
+        {/* Dots */}
         {totalImages > 1 && (
           <div className="flex justify-center gap-2 mt-4">
             {project.image.map((_, idx) => (
