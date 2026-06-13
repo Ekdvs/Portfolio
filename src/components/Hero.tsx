@@ -178,7 +178,7 @@ const Hero: React.FC = () => {
         {/* Status badge */}
         <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-xs font-medium tracking-wide text-emerald-300 border border-emerald-500/25 bg-emerald-500/[0.08]">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          Software Engineer Intern @ Aztra · May 2026
+         
         </div>
 
         {/* Name — typed once, never replays */}
