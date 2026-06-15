@@ -2,6 +2,26 @@ import type { Certificate } from "../types";
 
 export const certificates: Certificate[] = [
   {
+    id: 14,
+    name: 'KodeKloud Engineer – 100 Days of Cloud (AWS)',
+    issuer: 'KodeKloud',
+    date: 'Jun 2026',
+    status: 'done',
+    tags: [
+      'AWS',
+      'Cloud',
+      'DevOps',
+      'Linux',
+      'EC2',
+      'S3',
+      'IAM'
+    ],
+    credentialId: '86ae72a8-f659-4f1f-8100-3b1707428ea6',
+    url: 'https://engineer.kodekloud.com/certificate-verification/86ae72a8-f659-4f1f-8100-3b1707428ea6',
+    image: '/Portfolio/certificates/kodekloudaws.png',
+    description: 'Hands-on AWS cloud engineering challenge covering EC2, VPC, IAM, S3, RDS, Lambda, Kubernetes (EKS), and infrastructure automation.',
+  },
+  {
     id: 1,
     name: 'KodeKloud Engineer – Docker (Level 1)',
     issuer: 'KodeKloud',
