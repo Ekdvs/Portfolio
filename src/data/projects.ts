@@ -55,7 +55,21 @@ export const projects: Project[] = [
     category: "fullstack"
   },
   {
-    id: 6,
+  id: 6,
+  title: "Personal Finance Tracker",
+  tech: "React | Node.js | Express | MongoDB | TypeScript",
+  description:
+    "Full-stack personal finance management app for tracking income, expenses, budgets, and financial insights with interactive dashboards, charts, and secure JWT authentication.",
+  image: [
+    "ft1.png","ft2.png","ft3.png","ft4.png","ft5.png","ft6.png",
+    
+  ],
+  liveLink: "https://your-live-demo-link.com",
+  githubLink: ["https://github.com/Ekdvs/personal-finance-tracker","https://github.com/Ekdvs/personal-finance-tracker/tree/main/backend",],
+  category: "fullstack"
+},
+  {
+    id: 15,
     title: "travel experience providers",
     tech: "Next.js | MERN Stack | TypeScript",
     description: "Platform for publishing and discovering local travel experiences.",

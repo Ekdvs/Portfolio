@@ -140,7 +140,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onOpen }) => {
               </a>
             ))}
         </div>
-
         {/* Dots */}
         {totalImages > 1 && (
           <div className="flex justify-center gap-2 mt-4">
