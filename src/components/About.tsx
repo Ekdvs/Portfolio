@@ -214,7 +214,7 @@ const About: React.FC<AboutProps> = ({ services, profileImage }) => {
 
         {/* Experience */}
         <div className="mb-10">
-          <Section icon={Briefcase} label="Experience" />
+          
           <ExperienceSection experience={experience} />
         </div>
 
