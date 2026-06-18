@@ -5,7 +5,7 @@ interface NavbarProps {
   activeSection?: string;
 }
 
-const NAV_ITEMS = ['Home', 'About', 'Projects','Certificates', 'Contact'];
+const NAV_ITEMS = ['Home', 'About', 'Projects','Certificates', 'Skills','Contact'];
 
 const Navbar: React.FC<NavbarProps> = ({ activeSection = 'home' }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

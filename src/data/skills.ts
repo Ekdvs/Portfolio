@@ -12,5 +12,5 @@ export const skills: Skill[] = [
   { name: "Tailwind CSS", level: 90, category: "frontend" },
   { name: "Git & GitHub", level: 90, category: "tools" },
   { name: "Docker ", level: 75, category: "tools" },
-  { name: " AWS", level: 75, category: "tools" }
+  { name: " AWS", level:80, category: "tools" }
 ];
