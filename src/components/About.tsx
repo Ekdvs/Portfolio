@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Mail, Phone, MapPin, BookOpen, Github, Linkedin,
-  Terminal, Award, Languages, Heart, Briefcase,
+  Terminal, Award, Languages, Heart, 
   Lightbulb, Users, RefreshCw, Clock, TrendingUp, MessageSquare,
   
 } from 'lucide-react';
