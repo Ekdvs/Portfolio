@@ -49,7 +49,7 @@ const Certificates: React.FC<CertificatesProps> = ({ certificates }) => {
           ))}
         </div>
 
-        {certificates.length > 8 && (
+        {certificates.length > 9 && (
           <div className="flex justify-center mt-10">
             <button
               onClick={() => setShowAll(!showAll)}

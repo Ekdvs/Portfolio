@@ -45,6 +45,18 @@ export const certificates: Certificate[] = [
     description: 'In-progress program covering CI/CD pipelines, IaC, and multi-cloud deployment strategies.',
   },
   {
+  id: 15,
+  name: 'KodeKloud Engineer – Jenkins (Level 1)',
+  issuer: 'KodeKloud',
+  date: 'Jun 2026',
+  status: 'done',
+  tags: ['Jenkins', 'CI/CD', 'DevOps', 'Automation'],
+  credentialId: '901c49c1-3b89-4511-aea5-f13295fa970a',
+  url: 'https://engineer.kodekloud.com/certificate-verification/901c49c1-3b89-4511-aea5-f13295fa970a',
+  image: '/Portfolio/certificates/kodekloudjenkins.png',
+  description: 'Hands-on labs covering Jenkins setup, job creation, plugin management, security configuration, and CI/CD pipeline fundamentals.',
+},
+  {
     id: 3,
     name: 'Beauty of Cloud 2.0 — Session 01',
     issuer: 'IEEE Computer Society',
