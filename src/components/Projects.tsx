@@ -10,6 +10,11 @@ interface ProjectsProps {
 
 const Projects: React.FC<ProjectsProps> = ({ projects }) => {
   const [selected, setSelected] = useState<Project | null>(null);
+  const [showAll, setShowAll] = useState(false);
+
+  const displayedProjects = showAll
+    ? projects
+    : projects.slice(0, 8);
 
   return (
     <section id="projects" className="py-20 bg-slate-900/50">
@@ -19,13 +24,34 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
         </h2>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} onOpen={setSelected} />
+          {displayedProjects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onOpen={setSelected}
+            />
           ))}
         </div>
+
+        {/* Show More Button */}
+        {projects.length > 8 && (
+          <div className="flex justify-center mt-10">
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="px-6 py-3 rounded-xl border border-blue-500/20 bg-slate-800 text-blue-400 hover:border-blue-500/40 hover:bg-slate-700 transition-all duration-300"
+            >
+              {showAll
+                ? 'Show Less'
+                : `Show More (${projects.length - 8} More)`}
+            </button>
+          </div>
+        )}
       </div>
 
-      <ProjectModal project={selected} onClose={() => setSelected(null)} />
+      <ProjectModal
+        project={selected}
+        onClose={() => setSelected(null)}
+      />
     </section>
   );
 };

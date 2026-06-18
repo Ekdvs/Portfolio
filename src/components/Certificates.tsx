@@ -10,6 +10,11 @@ interface CertificatesProps {
 
 const Certificates: React.FC<CertificatesProps> = ({ certificates }) => {
   const [selected, setSelected] = useState<Certificate | null>(null);
+  const [showAll, setShowAll] = useState(false);
+
+  const displayedCertificates = showAll
+    ? certificates
+    : certificates.slice(0, 8);
 
   return (
     <section id="certificates" className="py-24 bg-[#060b14] relative overflow-hidden">
@@ -22,7 +27,10 @@ const Certificates: React.FC<CertificatesProps> = ({ certificates }) => {
             Achievements
           </span>
           <h2 className="text-4xl sm:text-5xl font-semibold text-[#f0f6ff] tracking-tight">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Certifications</span> & Licenses
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+              Certifications
+            </span>{' '}
+            & Licenses
           </h2>
         </div>
 
@@ -32,13 +40,33 @@ const Certificates: React.FC<CertificatesProps> = ({ certificates }) => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {certificates.map((c) => (
-            <CertificateCard key={c.id} certificate={c} onClick={setSelected} />
+          {displayedCertificates.map((c) => (
+            <CertificateCard
+              key={c.id}
+              certificate={c}
+              onClick={setSelected}
+            />
           ))}
         </div>
+
+        {certificates.length > 8 && (
+          <div className="flex justify-center mt-10">
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="px-6 py-3 rounded-xl border border-blue-500/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-all duration-300"
+            >
+              {showAll
+                ? 'Show Less'
+                : `Show More (${certificates.length - 8} More)`}
+            </button>
+          </div>
+        )}
       </div>
 
-      <CertificateModal certificate={selected} onClose={() => setSelected(null)} />
+      <CertificateModal
+        certificate={selected}
+        onClose={() => setSelected(null)}
+      />
     </section>
   );
 };
