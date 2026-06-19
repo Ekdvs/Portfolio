@@ -75,9 +75,9 @@ const EDUCATION = [
     badgeColor: null,
   },
   {
-    degree: 'Software Engineering & Full Stack Training',
+    degree: 'Software Engineering & Full Stack ',
     school: 'DP Education IT Campus & Coding School',
-    meta: '2023 – Present',
+    meta: '224 – Present',
     badge: null,
     badgeColor: null,
   },
