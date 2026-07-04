@@ -59,6 +59,18 @@ export const certificates: Certificate[] = [
     description: 'Hands-on labs covering user & group management, SSH hardening, cron access control, ACLs, firewalld configuration, SELinux setup, backups, and core Linux administration fundamentals.',
   },
   {
+    id: 17,
+    name: 'Mastering CI/CD',
+    issuer: 'Learnfi.lk',
+    date: 'Jun 2026',
+    status: 'done',
+    tags: ['CI/CD', 'Jenkins', 'GitLab', 'Docker', 'AWS EC2', 'SonarQube'],
+    credentialId: '4be8a641-70b3-49e7-b2ef-12bbc8cef9dc',
+    url: 'https://learnfi.lk/cert/4be8a641-70b3-49e7-b2ef-12bbc8cef9dc',
+    image: '/Portfolio/certificates/learnfi-cicd.png',
+    description: 'Comprehensive CI/CD pipeline project covering AWS EC2 setup, Nginx reverse proxy, GitLab-Jenkins integration, SonarQube static analysis, Docker containerization, and end-to-end deployment automation.',
+  },
+  {
     id: 2,
     name: 'CloudPath Pro — DevOps & Cloud Engineering',
     issuer: 'Learnfi',
