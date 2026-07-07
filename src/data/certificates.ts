@@ -22,6 +22,32 @@ export const certificates: Certificate[] = [
     description: 'Hands-on AWS cloud engineering challenge covering EC2, VPC, IAM, S3, RDS, Lambda, Kubernetes (EKS), and infrastructure automation.',
   },
   {
+  id: 18,
+  name: '100 Days of Cloud (Azure)',
+  issuer: 'KodeKloud',
+  date: 'Jul 2026',
+  status: 'done',
+  tags: [
+    'Microsoft Azure',
+    'Azure VM',
+    'Azure Networking',
+    'Azure CLI',
+    'Azure Storage',
+    'Azure SQL',
+    'Azure Kubernetes Service',
+    'AKS',
+    'Azure Application Gateway',
+    'Docker',
+    'Kubernetes',
+    'Cloud Computing',
+    'DevOps'
+  ],
+  credentialId: '719b6d23-a918-4dbe-aecd-4d489b0ead78',
+  url: 'https://engineer.kodekloud.com/certificate-verification/719b6d23-a918-4dbe-aecd-4d489b0ead78',
+  image: '/Portfolio/certificates/kodekloudazure.png',
+  description: 'Completed 100 Days of Cloud (Azure) hands-on practice covering Azure Virtual Machines, Virtual Networks, Subnets, Storage, Security, Azure SQL Database, Application Gateway, Azure Kubernetes Service (AKS), Azure Container Registry (ACR), Event Hub integration, ARM Templates, Azure CLI automation, and cloud infrastructure management.'
+},
+  {
     id: 1,
     name: 'KodeKloud Engineer – Docker (Level 1)',
     issuer: 'KodeKloud',
@@ -70,6 +96,7 @@ export const certificates: Certificate[] = [
     image: '/Portfolio/certificates/learnfi-cicd.png',
     description: 'Comprehensive CI/CD pipeline project covering AWS EC2 setup, Nginx reverse proxy, GitLab-Jenkins integration, SonarQube static analysis, Docker containerization, and end-to-end deployment automation.',
   },
+  
   {
     id: 2,
     name: 'CloudPath Pro — DevOps & Cloud Engineering',
