@@ -18,7 +18,7 @@ export const certificates: Certificate[] = [
     ],
     credentialId: '86ae72a8-f659-4f1f-8100-3b1707428ea6',
     url: 'https://engineer.kodekloud.com/certificate-verification/86ae72a8-f659-4f1f-8100-3b1707428ea6',
-    image: '/Portfolio/certificates/kodekloudaws.png',
+    image: '/certificates/kodekloudaws.png',
     description: 'Hands-on AWS cloud engineering challenge covering EC2, VPC, IAM, S3, RDS, Lambda, Kubernetes (EKS), and infrastructure automation.',
   },
   {
@@ -44,7 +44,7 @@ export const certificates: Certificate[] = [
   ],
   credentialId: '719b6d23-a918-4dbe-aecd-4d489b0ead78',
   url: 'https://engineer.kodekloud.com/certificate-verification/719b6d23-a918-4dbe-aecd-4d489b0ead78',
-  image: '/Portfolio/certificates/kodekloudazure.png',
+  image: '/certificates/kodekloudazure.png',
   description: 'Completed 100 Days of Cloud (Azure) hands-on practice covering Azure Virtual Machines, Virtual Networks, Subnets, Storage, Security, Azure SQL Database, Application Gateway, Azure Kubernetes Service (AKS), Azure Container Registry (ACR), Event Hub integration, ARM Templates, Azure CLI automation, and cloud infrastructure management.'
 },
   {
@@ -56,7 +56,7 @@ export const certificates: Certificate[] = [
     tags: ['Docker', 'Linux', 'Containers', 'DevOps'],
     credentialId: 'ab4513a9-acb5-4bcc-9298-fd1e73f7f3f2',
     url: 'https://engineer.kodekloud.com/certificate-verification/ab4513a9-acb5-4bcc-9298-fd1e73f7f3f2',
-    image: '/Portfolio/certificates/kodeklouddocker.png',
+    image: '/certificates/kodeklouddocker.png',
     description: 'Hands-on labs covering Docker fundamentals, image building, and container orchestration basics.',
   },
 
@@ -69,7 +69,7 @@ export const certificates: Certificate[] = [
     tags: ['Jenkins', 'CI/CD', 'DevOps', 'Automation'],
     credentialId: '901c49c1-3b89-4511-aea5-f13295fa970a',
     url: 'https://engineer.kodekloud.com/certificate-verification/901c49c1-3b89-4511-aea5-f13295fa970a',
-    image: '/Portfolio/certificates/kodekloudjenkins.png',
+    image: '/certificates/kodekloudjenkins.png',
     description: 'Hands-on labs covering Jenkins setup, job creation, plugin management, security configuration, and CI/CD pipeline fundamentals.',
   },
   {
@@ -81,7 +81,7 @@ export const certificates: Certificate[] = [
     tags: ['Linux', 'SysAdmin', 'SELinux', 'Firewalld'],
     credentialId: '7cc72030-90ae-45a5-9068-9b2a6d21948c',
     url: 'https://engineer.kodekloud.com/certificate-verification/7cc72030-90ae-45a5-9068-9b2a6d21948c',
-    image: '/Portfolio/certificates/kodekloudlinux.png',
+    image: '/certificates/kodekloudlinux.png',
     description: 'Hands-on labs covering user & group management, SSH hardening, cron access control, ACLs, firewalld configuration, SELinux setup, backups, and core Linux administration fundamentals.',
   },
   {
@@ -93,7 +93,7 @@ export const certificates: Certificate[] = [
     tags: ['CI/CD', 'Jenkins', 'GitLab', 'Docker', 'AWS EC2', 'SonarQube'],
     credentialId: '4be8a641-70b3-49e7-b2ef-12bbc8cef9dc',
     url: 'https://learnfi.lk/cert/4be8a641-70b3-49e7-b2ef-12bbc8cef9dc',
-    image: '/Portfolio/certificates/learnfi-cicd.png',
+    image: '/certificates/learnfi-cicd.png',
     description: 'Comprehensive CI/CD pipeline project covering AWS EC2 setup, Nginx reverse proxy, GitLab-Jenkins integration, SonarQube static analysis, Docker containerization, and end-to-end deployment automation.',
   },
   
@@ -117,7 +117,7 @@ export const certificates: Certificate[] = [
     tags: ['Cloud'],
     credentialId: 'CRD-9R422D8J',
     url: 'https://credentials.certdirectory.io/verify/CRD-9R422D8J',
-    image: '/Portfolio/certificates/beauty-of-cloud.png',
+    image: '/certificates/beauty-of-cloud.png',
     description: 'Workshop session on modern cloud computing concepts and architecture patterns.',
   },
   {
@@ -129,7 +129,7 @@ export const certificates: Certificate[] = [
     tags: ['GCP', 'Cloud'],
     credentialId: 'CRD-T7RRNCDG',
     url: 'https://credentials.certdirectory.io/verify/CRD-T7RRNCDG',
-    image: '/Portfolio/certificates/codeku-gcp.png',
+    image: '/certificates/codeku-gcp.png',
     description: 'Foundational certification covering Google Cloud Platform core services and best practices.',
   },
   {
@@ -140,7 +140,7 @@ export const certificates: Certificate[] = [
     status: 'done',
     tags: ['MERN', 'Full Stack'],
     url: 'https://certificate.skyrek.com/certifcates/completion/X00wz6r38JMo',
-    image: '/Portfolio/certificates/skyrek-mern.png',
+    image: '/certificates/skyrek-mern.png',
     description: 'Comprehensive MERN stack training covering MongoDB, Express, React, and Node.js.',
   },
   {
@@ -151,7 +151,7 @@ export const certificates: Certificate[] = [
     status: 'done',
     tags: ['Multicloud', 'Networking'],
     url: 'https://www.credly.com/badges/a216d2c6-cf0c-4ee2-a3a4-11a6e3586c05/linked_in_profile',
-    image: '/Portfolio/certificates/aviatrix-multicloud.png',
+    image: '/certificates/aviatrix-multicloud.png',
     expires: 'Oct 2028',
     description: 'Multicloud networking certification covering cross-cloud connectivity and security.',
   },
@@ -164,7 +164,7 @@ export const certificates: Certificate[] = [
     tags: ['MERN'],
     credentialId: 'CN:FDM181-C01',
     url: null,
-    image: '/Portfolio/certificates/skill-lab-mern.png',
+    image: '/certificates/skill-lab-mern.png',
     description: 'Pathway certification for full stack MERN development fundamentals and project work.',
   },
   {
@@ -175,7 +175,7 @@ export const certificates: Certificate[] = [
     status: 'done',
     tags: ['Docker'],
     url: 'https://www.linkedin.com/learning/certificates/6fdb954e588d53e3e3b8819e9b624f4fc0e86d5d983888c3bae10082d234e364/',
-    image: '/Portfolio/certificates/linkedin-docker.png',
+    image: '/certificates/linkedin-docker.png',
     description: 'Introductory course on Docker concepts, containers, and image management.',
   },
   {
@@ -186,7 +186,7 @@ export const certificates: Certificate[] = [
     status: 'done',
     tags: ['React'],
     url: null,
-    image: '/Portfolio/certificates/dp-react.png',
+    image: '/certificates/dp-react.png',
     description: 'Certification covering React fundamentals, hooks, and component architecture.',
   },
   {
@@ -197,7 +197,7 @@ export const certificates: Certificate[] = [
     status: 'done',
     tags: ['Figma', 'UI/UX'],
     url: null,
-    image: '/Portfolio/certificates/dp-figma.png',
+    image: '/certificates/dp-figma.png',
     description: 'Certification covering UI/UX design fundamentals using Figma.',
   },
   {
@@ -208,7 +208,7 @@ export const certificates: Certificate[] = [
     status: 'done',
     tags: ['HTML', 'Web Development'],
     url: null,
-    image: '/Portfolio/certificates/dp-html.png',
+    image: '/certificates/dp-html.png',
     description: 'Certification covering HTML fundamentals and web development concepts.',
   },
   {
@@ -219,7 +219,7 @@ export const certificates: Certificate[] = [
     status: 'done',
     tags: ['CSS', 'Web Development'],
     url: null,
-    image: '/Portfolio/certificates/dp-css.png',
+    image: '/certificates/dp-css.png',
     description: 'Certification covering CSS fundamentals and web development concepts.',
   },
   {
@@ -230,7 +230,7 @@ export const certificates: Certificate[] = [
     status: 'done',
     tags: ['JavaScript', 'Web Development'],
     url: null,
-    image: '/Portfolio/certificates/dp-javascript.png',
+    image: '/certificates/dp-javascript.png',
     description: 'Certification covering JavaScript fundamentals and web development concepts.',
   },
 
