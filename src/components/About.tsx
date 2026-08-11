@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Mail, Phone, MapPin, BookOpen, Github, Linkedin,
-  Terminal, Award, Languages, Heart, 
+  Terminal, Award, Languages, Heart,
   Lightbulb, Users, RefreshCw, Clock, TrendingUp, MessageSquare,
-  
+
 } from 'lucide-react';
 import type { Service } from '../types';
 import ExperienceSection from './Experience';
@@ -83,10 +83,6 @@ const EDUCATION = [
   },
 ];
 
-
-
-
-
 const SOFT_SKILLS = [
   { icon: Lightbulb,     label: 'Problem solving' },
   { icon: Users,         label: 'Team collaboration' },
@@ -114,16 +110,182 @@ const Section: React.FC<{ icon: React.ElementType; label: string }> = ({ icon: I
 
 const Divider = () => <div className="h-px bg-gradient-to-r from-transparent via-blue-500/15 to-transparent my-10" />;
 
+// ── decorative background: "Wave Mesh" ───────────────────────────────────────
+// A canvas of nodes arranged in a loose grid, drifting on a slow sine wave.
+// Unlike the Hero's free-floating particles that scatter away from the cursor,
+// these nodes gently GATHER toward the cursor (an "attract" field), and are
+// linked into a mesh rather than a starfield. Two soft aurora ellipses sit
+// behind it, plus a single slow-orbiting ring instead of shooting stars.
+
+const AboutMeshBackground: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: -9999, y: -9999 });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d')!;
+    let animId: number;
+    let width = 0, height = 0;
+    let t = 0;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const resize = () => {
+      width = canvas.offsetWidth;
+      height = canvas.offsetHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      buildGrid();
+    };
+
+    const PALETTE = ['59,130,246', '34,211,238', '129,140,248'];
+
+    type Node = {
+      baseX: number; baseY: number; x: number; y: number;
+      phase: number; color: string; r: number;
+    };
+
+    let nodes: Node[] = [];
+
+    const buildGrid = () => {
+      nodes = [];
+      const spacingX = 90;
+      const spacingY = 90;
+      const cols = Math.ceil(width / spacingX) + 2;
+      const rows = Math.ceil(height / spacingY) + 2;
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const jitterX = (Math.random() - 0.5) * 30;
+          const jitterY = (Math.random() - 0.5) * 30;
+          const baseX = i * spacingX + jitterX - spacingX;
+          const baseY = j * spacingY + jitterY - spacingY;
+          nodes.push({
+            baseX,
+            baseY,
+            x: baseX,
+            y: baseY,
+            phase: Math.random() * Math.PI * 2,
+            color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
+            r: Math.random() * 0.8 + 0.6,
+          });
+        }
+      }
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    const onMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    };
+    const onLeave = () => {
+      mouseRef.current = { x: -9999, y: -9999 };
+    };
+    canvas.parentElement?.addEventListener('mousemove', onMove);
+    canvas.parentElement?.addEventListener('mouseleave', onLeave);
+
+    const linkDist = 100;
+
+    const draw = () => {
+      t += 0.012;
+      ctx.clearRect(0, 0, width, height);
+      const m = mouseRef.current;
+
+      // update positions: gentle sine drift + gather toward cursor
+      nodes.forEach((n) => {
+        const driftX = Math.sin(t + n.phase) * 6;
+        const driftY = Math.cos(t * 0.8 + n.phase) * 6;
+        let x = n.baseX + driftX;
+        let y = n.baseY + driftY;
+
+        const dx = m.x - x, dy = m.y - y;
+        const dist = Math.hypot(dx, dy);
+        const radius = 160;
+        if (dist < radius) {
+          const pull = (1 - dist / radius) * 18;
+          x += (dx / (dist || 1)) * pull;
+          y += (dy / (dist || 1)) * pull;
+        }
+        n.x = x;
+        n.y = y;
+      });
+
+      // mesh links between nearby nodes
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d < linkDist) {
+            const alpha = 0.10 * (1 - d / linkDist);
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(${a.color},${alpha})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // nodes
+      nodes.forEach((n) => {
+        const twinkle = 0.35 + Math.sin(t * 1.4 + n.phase) * 0.2;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${n.color},${twinkle})`;
+        ctx.fill();
+      });
+
+      animId = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', resize);
+      canvas.parentElement?.removeEventListener('mousemove', onMove);
+      canvas.parentElement?.removeEventListener('mouseleave', onLeave);
+    };
+  }, []);
+
+  return (
+    <>
+      {/* soft aurora wash, calmer than Hero's, positioned differently */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-24 left-[-8%] w-[42vw] h-[30vw] max-w-[520px] max-h-[380px] rounded-[50%] blur-[100px] opacity-[0.22] bg-gradient-to-br from-blue-600 via-blue-500/50 to-transparent" />
+        <div className="absolute bottom-[-15%] right-[-6%] w-[38vw] h-[34vw] max-w-[460px] max-h-[420px] rounded-[50%] blur-[100px] opacity-[0.18] bg-gradient-to-tr from-cyan-400 via-indigo-500/40 to-transparent" />
+      </div>
+
+      {/* single slow-orbiting ring, unique to About */}
+      <svg
+        className="absolute top-8 right-[10%] w-[200px] h-[200px] opacity-[0.09] pointer-events-none animate-[meshOrbit_70s_linear_infinite]"
+        viewBox="0 0 200 200"
+        fill="none"
+      >
+        <circle cx="100" cy="100" r="90" stroke="#38bdf8" strokeWidth="1" strokeDasharray="2 8" />
+        <circle cx="190" cy="100" r="4" fill="#60a5fa" />
+      </svg>
+
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
+
+      <style>{`
+        @keyframes meshOrbit { from{ transform: rotate(0deg);} to{ transform: rotate(360deg);} }
+      `}</style>
+    </>
+  );
+};
+
 // ── component ─────────────────────────────────────────────────────────────────
 
 const About: React.FC<AboutProps> = ({ services, profileImage }) => {
   return (
     <section id="about" className="py-24 bg-[#060b14] relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-40 right-0 w-72 h-72 bg-blue-600 opacity-[0.05] blur-[100px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-40 left-0 w-64 h-64 bg-cyan-500 opacity-[0.05] blur-[100px] rounded-full pointer-events-none" />
+      {/* Wave-mesh reactive background */}
+      <AboutMeshBackground />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Header */}
         <div className="text-center mb-16">
@@ -214,7 +376,6 @@ const About: React.FC<AboutProps> = ({ services, profileImage }) => {
 
         {/* Experience */}
         <div className="mb-10">
-          
           <ExperienceSection experience={experience} />
         </div>
 
@@ -279,10 +440,6 @@ const About: React.FC<AboutProps> = ({ services, profileImage }) => {
         </div>
 
         <Divider />
-
-        
-
-        
 
         {/* Services */}
         {services.length > 0 && (
