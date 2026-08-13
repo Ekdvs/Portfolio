@@ -1,13 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import type { ThreeEvent } from '@react-three/fiber';
+import * as THREE from 'three';
 import { Github, Linkedin, Mail, ChevronDown, Code2, Layers, Rocket, Briefcase } from 'lucide-react';
 
+
+
 const ROLES = [
-  "Full-Stack Developer",
-  "Software Engineer",
-  "MERN Stack Developer",
-  "Spring Boot Developer",
-  "Cloud & DevOps Enthusiast",
-  "Web Application Builder"
+  'Full-Stack Developer',
+  'Software Engineer',
+  'MERN Stack Developer',
+  'Spring Boot Developer',
+  'Cloud & DevOps Enthusiast',
+  'Web Application Builder',
 ];
 
 const STATS = [
@@ -25,209 +30,379 @@ const SOCIAL_LINKS = [
 
 const FULL_NAME = 'Vishwa Sampath';
 
-// --- Modern reactive background: particle mesh + mouse parallax + aurora glow ---
-const ReactiveBackground: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: -9999, y: -9999 });
-  const glowRef = useRef<HTMLDivElement>(null);
+const PALETTE = [
+  new THREE.Color('#60a5fa'),
+  new THREE.Color('#38bdf8'),
+  new THREE.Color('#818cf8'),
+  new THREE.Color('#a78bfa'),
+];
+
+/* ============ Radial-gradient sprite texture, built once on canvas ============ */
+function useGlowTexture() {
+  return useMemo(() => {
+    const size = 256;
+    const c = document.createElement('canvas');
+    c.width = size;
+    c.height = size;
+    const ctx = c.getContext('2d')!;
+    const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    grad.addColorStop(0, 'rgba(255,255,255,1)');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+  }, []);
+}
+
+/* ============ Drifting aurora glow blobs (additive sprites) ============ */
+const AURA_CONFIGS = [
+  { color: '#2563eb', pos: [-3.4, 1.4, -5] as [number, number, number], scale: 7.5, speed: 0.16 },
+  { color: '#22d3ee', pos: [3.4, -1.3, -5.2] as [number, number, number], scale: 6.8, speed: 0.13 },
+  { color: '#818cf8', pos: [0, 0.6, -5.6] as [number, number, number], scale: 5.4, speed: 0.1 },
+];
+
+const AuroraGlow: React.FC = () => {
+  const tex = useGlowTexture();
+  const refs = useRef<(THREE.Sprite | null)[]>([]);
+
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    AURA_CONFIGS.forEach((c, i) => {
+      const s = refs.current[i];
+      if (!s) return;
+      s.position.x = c.pos[0] + Math.sin(t * c.speed) * 0.8;
+      s.position.y = c.pos[1] + Math.cos(t * c.speed * 0.8) * 0.6;
+    });
+  });
+
+  return (
+    <>
+      {AURA_CONFIGS.map((c, i) => (
+        <sprite key={i} ref={(el) => (refs.current[i] = el)} position={c.pos} scale={[c.scale, c.scale, 1]}>
+          <spriteMaterial
+            map={tex}
+            color={c.color}
+            transparent
+            opacity={0.32}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+          />
+        </sprite>
+      ))}
+    </>
+  );
+};
+
+/* ============ Particle network — two depth layers, mouse repulsion, live connecting lines ============ */
+const PARTICLE_COUNT = 70;
+const LAYER_SPLIT = 46;
+
+const pseudoRandom = (seed: number) => {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+};
+
+const ParticleNetwork: React.FC = () => {
+  const { camera, size } = useThree();
+  const pointsRef = useRef<THREE.Points>(null);
+  const linesRef = useRef<THREE.LineSegments>(null);
+  const mouseWorld = useRef(new THREE.Vector3(9999, 9999, 0));
+  const raycaster = useRef(new THREE.Raycaster());
+  const plane = useRef(new THREE.Plane(new THREE.Vector3(0, 0, 1), 0));
+
+  const particles = useMemo(
+    () =>
+      Array.from({ length: PARTICLE_COUNT }, (_, i) => {
+        const layer = i < LAYER_SPLIT ? 0 : 1;
+        const r1 = pseudoRandom(i * 4 + 1);
+        const r2 = pseudoRandom(i * 4 + 2);
+        const r3 = pseudoRandom(i * 4 + 3);
+        const r4 = pseudoRandom(i * 4 + 4);
+        return {
+          x: (r1 - 0.5) * 10,
+          y: (r2 - 0.5) * 7,
+          vx: (r3 - 0.5) * (0.006 + layer * 0.01),
+          vy: (r4 - 0.5) * (0.006 + layer * 0.01),
+          layer,
+          color: PALETTE[Math.floor(r1 * PALETTE.length)],
+          seed: r2 * Math.PI * 2,
+          speed: 0.6 + r3 * 1.2,
+        };
+      }),
+    []
+  );
+
+  const positions = useMemo(() => new Float32Array(PARTICLE_COUNT * 3), []);
+  const colors = useMemo(() => new Float32Array(PARTICLE_COUNT * 3), []);
+
+  const maxLines = (PARTICLE_COUNT * (PARTICLE_COUNT - 1)) / 2;
+  const linePositions = useMemo(() => new Float32Array(maxLines * 2 * 3), [maxLines]);
+  const lineColors = useMemo(() => new Float32Array(maxLines * 2 * 3), [maxLines]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d')!;
-    let animId: number;
-    let width = 0, height = 0;
-    let t = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    const resize = () => {
-      width = canvas.offsetWidth;
-      height = canvas.offsetHeight;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const onMove = (e: PointerEvent) => {
+      const ndc = new THREE.Vector2((e.clientX / size.width) * 2 - 1, -(e.clientY / size.height) * 2 + 1);
+      raycaster.current.setFromCamera(ndc, camera);
+      const hit = new THREE.Vector3();
+      const ok = raycaster.current.ray.intersectPlane(plane.current, hit);
+      if (ok) mouseWorld.current.copy(hit);
     };
-    resize();
-    window.addEventListener('resize', resize);
-
-    // palette of soft blues/cyans/violets for depth variety
-    const PALETTE = ['96,165,250', '56,189,248', '129,140,248', '167,139,250'];
-
-    type Particle = {
-      x: number; y: number; vx: number; vy: number; r: number;
-      layer: number; color: string; twinkleSeed: number; twinkleSpeed: number;
+    const onLeave = () => mouseWorld.current.set(9999, 9999, 0);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerleave', onLeave);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerleave', onLeave);
     };
+  }, [camera, size]);
 
-    const makeParticles = (count: number, layer: number): Particle[] =>
-      Array.from({ length: count }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * (0.12 + layer * 0.18),
-        vy: (Math.random() - 0.5) * (0.12 + layer * 0.18),
-        r: (Math.random() * 1.1 + 0.4) * (0.7 + layer * 0.6),
-        layer,
-        color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
-        twinkleSeed: Math.random() * Math.PI * 2,
-        twinkleSpeed: 0.6 + Math.random() * 1.2,
-      }));
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    const m = mouseWorld.current;
 
-    // two depth layers: distant dim/small, near bright/large
-    const pts: Particle[] = [...makeParticles(46, 0), ...makeParticles(26, 1)];
+    particles.forEach((p, i) => {
+      const dx = p.x - m.x;
+      const dy = p.y - m.y;
+      const dist = Math.hypot(dx, dy);
+      const radius = 1.6 + p.layer * 0.6;
+      if (dist < radius) {
+        const force = (radius - dist) / radius;
+        p.x += (dx / (dist || 1)) * force * 0.05 * (1 + p.layer);
+        p.y += (dy / (dist || 1)) * force * 0.05 * (1 + p.layer);
+      }
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -5.5) p.x = 5.5;
+      if (p.x > 5.5) p.x = -5.5;
+      if (p.y < -3.8) p.y = 3.8;
+      if (p.y > 3.8) p.y = -3.8;
 
-    type Shard = { x: number; y: number; vx: number; vy: number; len: number; life: number; maxLife: number };
-    let shards: Shard[] = [];
-    const spawnShootingStar = () => {
-      const fromLeft = Math.random() > 0.5;
-      const startX = fromLeft ? -20 : width + 20;
-      const startY = Math.random() * height * 0.5;
-      const speed = 6 + Math.random() * 3;
-      shards.push({
-        x: startX,
-        y: startY,
-        vx: (fromLeft ? 1 : -1) * speed,
-        vy: speed * 0.35,
-        len: 70 + Math.random() * 40,
-        life: 0,
-        maxLife: 60,
-      });
-    };
-    const shootingInterval = setInterval(() => {
-      if (Math.random() < 0.6) spawnShootingStar();
-    }, 3200);
+      const z = p.layer === 0 ? -2.6 : -0.9;
+      positions[i * 3] = p.x;
+      positions[i * 3 + 1] = p.y;
+      positions[i * 3 + 2] = z;
 
-    type Burst = { x: number; y: number; life: number };
-    let bursts: Burst[] = [];
-    const onClick = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      bursts.push({ x: e.clientX - rect.left, y: e.clientY - rect.top, life: 0 });
-    };
+      const twinkle = 0.5 + Math.sin(t * p.speed + p.seed) * 0.4;
+      colors[i * 3] = p.color.r * twinkle;
+      colors[i * 3 + 1] = p.color.g * twinkle;
+      colors[i * 3 + 2] = p.color.b * twinkle;
+    });
 
+    if (pointsRef.current) {
+      const geo = pointsRef.current.geometry;
+      (geo.attributes.position as THREE.BufferAttribute).needsUpdate = true;
+      (geo.attributes.color as THREE.BufferAttribute).needsUpdate = true;
+    }
+
+    let lineCount = 0;
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const a = particles[i];
+        const b = particles[j];
+        if (a.layer !== b.layer) continue;
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        const maxD = 1.4 + a.layer * 0.3;
+        if (d < maxD && lineCount < maxLines) {
+          const idx = lineCount * 6;
+          const az = a.layer === 0 ? -2.6 : -0.9;
+          const bz = b.layer === 0 ? -2.6 : -0.9;
+          linePositions[idx] = a.x;
+          linePositions[idx + 1] = a.y;
+          linePositions[idx + 2] = az;
+          linePositions[idx + 3] = b.x;
+          linePositions[idx + 4] = b.y;
+          linePositions[idx + 5] = bz;
+          const alpha = 1 - d / maxD;
+          lineColors[idx] = a.color.r * alpha;
+          lineColors[idx + 1] = a.color.g * alpha;
+          lineColors[idx + 2] = a.color.b * alpha;
+          lineColors[idx + 3] = b.color.r * alpha;
+          lineColors[idx + 4] = b.color.g * alpha;
+          lineColors[idx + 5] = b.color.b * alpha;
+          lineCount++;
+        }
+      }
+    }
+    if (linesRef.current) {
+      const geo = linesRef.current.geometry;
+      (geo.attributes.position as THREE.BufferAttribute).needsUpdate = true;
+      (geo.attributes.color as THREE.BufferAttribute).needsUpdate = true;
+      geo.setDrawRange(0, lineCount * 2);
+    }
+  });
+
+  return (
+    <>
+      <points ref={pointsRef}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+          <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+        </bufferGeometry>
+        <pointsMaterial
+          vertexColors
+          size={0.055}
+          sizeAttenuation
+          transparent
+          opacity={0.9}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </points>
+      <lineSegments ref={linesRef} frustumCulled={false}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[linePositions, 3]} />
+          <bufferAttribute attach="attributes-color" args={[lineColors, 3]} />
+        </bufferGeometry>
+        <lineBasicMaterial vertexColors transparent opacity={0.35} blending={THREE.AdditiveBlending} depthWrite={false} />
+      </lineSegments>
+    </>
+  );
+};
+
+/* ============ Shooting stars — spawned periodically, fade out as line trails ============ */
+const ShootingStars: React.FC = () => {
+  const groupRef = useRef<THREE.Group>(null);
+  const shards = useRef<{ mesh: THREE.Line; vx: number; vy: number; life: number; maxLife: number }[]>([]);
+
+  const spawn = () => {
+    if (!groupRef.current) return;
+    const fromLeft = Math.random() > 0.5;
+    const startX = fromLeft ? -6 : 6;
+    const startY = (Math.random() - 0.5) * 3 + 1.4;
+    const speed = 0.09 + Math.random() * 0.05;
+    const vx = fromLeft ? speed : -speed;
+    const vy = -speed * 0.35;
+
+    const geo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(-vx * 9, -vy * 9, 0)]);
+    const mat = new THREE.LineBasicMaterial({
+      color: '#e0f2fe',
+      transparent: true,
+      opacity: 1,
+      blending: THREE.AdditiveBlending,
+    });
+    const mesh = new THREE.Line(geo, mat);
+    mesh.position.set(startX, startY, -1.4);
+    groupRef.current.add(mesh);
+    shards.current.push({ mesh, vx, vy, life: 0, maxLife: 55 });
+  };
+
+  useFrame(() => {
+    if (Math.random() < 0.004) spawn();
+    shards.current = shards.current.filter((s) => {
+      s.life++;
+      s.mesh.position.x += s.vx;
+      s.mesh.position.y += s.vy;
+      const mat = s.mesh.material as THREE.LineBasicMaterial;
+      mat.opacity = Math.max(0, 1 - s.life / s.maxLife);
+      if (s.life >= s.maxLife) {
+        groupRef.current?.remove(s.mesh);
+        s.mesh.geometry.dispose();
+        mat.dispose();
+        return false;
+      }
+      return true;
+    });
+  });
+
+  return <group ref={groupRef} />;
+};
+
+/* ============ Click ripple bursts — expanding rings at the clicked point ============ */
+const ClickBursts: React.FC = () => {
+  const groupRef = useRef<THREE.Group>(null);
+  const bursts = useRef<{ mesh: THREE.Mesh; life: number }[]>([]);
+
+  useFrame(() => {
+    bursts.current = bursts.current.filter((b) => {
+      b.life++;
+      const progress = b.life / 40;
+      b.mesh.scale.setScalar(1 + progress * 3);
+      const mat = b.mesh.material as THREE.MeshBasicMaterial;
+      mat.opacity = Math.max(0, 0.6 * (1 - progress));
+      if (b.life >= 40) {
+        groupRef.current?.remove(b.mesh);
+        b.mesh.geometry.dispose();
+        mat.dispose();
+        return false;
+      }
+      return true;
+    });
+  });
+
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    const geo = new THREE.RingGeometry(0.12, 0.15, 32);
+    const mat = new THREE.MeshBasicMaterial({
+      color: '#60a5fa',
+      transparent: true,
+      opacity: 0.6,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending,
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.copy(e.point);
+    groupRef.current?.add(mesh);
+    bursts.current.push({ mesh, life: 0 });
+  };
+
+  return (
+    <group ref={groupRef}>
+      <mesh position={[0, 0, 0]} onClick={handleClick} visible={false}>
+        <planeGeometry args={[24, 16]} />
+        <meshBasicMaterial />
+      </mesh>
+    </group>
+  );
+};
+
+const Scene: React.FC = () => (
+  <>
+    <ambientLight intensity={0.3} />
+    <AuroraGlow />
+    <ParticleNetwork />
+    <ShootingStars />
+    <ClickBursts />
+  </>
+);
+
+const ThreeBackground: React.FC = () => (
+  <div className="absolute inset-0">
+    <Canvas camera={{ position: [0, 0, 5], fov: 55 }} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true }}>
+      <Scene />
+    </Canvas>
+  </div>
+);
+
+/* ============ Cursor-follow CSS glow + moving grid (kept lightweight, layered above canvas) ============ */
+const AmbientOverlay: React.FC = () => {
+  const glowRef = useRef<HTMLDivElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
     const onMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      const rect = el.getBoundingClientRect();
       if (glowRef.current) {
         glowRef.current.style.transform = `translate(${e.clientX - rect.left - 200}px, ${e.clientY - rect.top - 200}px)`;
         glowRef.current.style.opacity = '1';
       }
     };
     const onLeave = () => {
-      mouseRef.current = { x: -9999, y: -9999 };
       if (glowRef.current) glowRef.current.style.opacity = '0';
     };
-    canvas.parentElement?.addEventListener('mousemove', onMove);
-    canvas.parentElement?.addEventListener('mouseleave', onLeave);
-    canvas.parentElement?.addEventListener('click', onClick);
-
-    const draw = () => {
-      t += 0.016;
-      ctx.clearRect(0, 0, width, height);
-      const m = mouseRef.current;
-
-      // connecting lines first, so particles glow on top
-      for (let i = 0; i < pts.length; i++) {
-        for (let j = i + 1; j < pts.length; j++) {
-          const a = pts[i], b = pts[j];
-          if (a.layer !== b.layer) continue; // only link same-depth particles
-          const d = Math.hypot(a.x - b.x, a.y - b.y);
-          const maxD = 90 + a.layer * 20;
-          if (d < maxD) {
-            const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-            grad.addColorStop(0, `rgba(${a.color},${0.16 * (1 - d / maxD)})`);
-            grad.addColorStop(1, `rgba(${b.color},${0.16 * (1 - d / maxD)})`);
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = 0.5 + a.layer * 0.3;
-            ctx.stroke();
-          }
-        }
-      }
-
-      pts.forEach((p) => {
-        // gentle mouse repulsion, stronger for near layer
-        const dx = p.x - m.x, dy = p.y - m.y;
-        const dist = Math.hypot(dx, dy);
-        const radius = 110 + p.layer * 40;
-        if (dist < radius) {
-          const force = (radius - dist) / radius;
-          p.x += (dx / (dist || 1)) * force * (1 + p.layer);
-          p.y += (dy / (dist || 1)) * force * (1 + p.layer);
-        }
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < -10) p.x = width + 10;
-        if (p.x > width + 10) p.x = -10;
-        if (p.y < -10) p.y = height + 10;
-        if (p.y > height + 10) p.y = -10;
-
-        const twinkle = 0.45 + Math.sin(t * p.twinkleSpeed + p.twinkleSeed) * 0.35;
-        ctx.save();
-        ctx.shadowBlur = 8 + p.layer * 6;
-        ctx.shadowColor = `rgba(${p.color},0.9)`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.color},${twinkle})`;
-        ctx.fill();
-        ctx.restore();
-      });
-
-      // shooting stars
-      shards = shards.filter((s) => s.life < s.maxLife);
-      shards.forEach((s) => {
-        s.x += s.vx;
-        s.y += s.vy;
-        s.life++;
-        const alpha = 1 - s.life / s.maxLife;
-        const grad = ctx.createLinearGradient(s.x, s.y, s.x - s.vx * (s.len / 8), s.y - s.vy * (s.len / 8));
-        grad.addColorStop(0, `rgba(224,242,254,${alpha})`);
-        grad.addColorStop(1, 'rgba(224,242,254,0)');
-        ctx.beginPath();
-        ctx.moveTo(s.x, s.y);
-        ctx.lineTo(s.x - s.vx * (s.len / 8), s.y - s.vy * (s.len / 8));
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      });
-
-      // click ripple bursts
-      bursts = bursts.filter((b) => b.life < 40);
-      bursts.forEach((b) => {
-        b.life++;
-        const progress = b.life / 40;
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, progress * 60, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(96,165,250,${0.5 * (1 - progress)})`;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      });
-
-      animId = requestAnimationFrame(draw);
-    };
-    draw();
-
+    el.addEventListener('mousemove', onMove);
+    el.addEventListener('mouseleave', onLeave);
     return () => {
-      cancelAnimationFrame(animId);
-      clearInterval(shootingInterval);
-      window.removeEventListener('resize', resize);
-      canvas.parentElement?.removeEventListener('mousemove', onMove);
-      canvas.parentElement?.removeEventListener('mouseleave', onLeave);
-      canvas.parentElement?.removeEventListener('click', onClick);
+      el.removeEventListener('mousemove', onMove);
+      el.removeEventListener('mouseleave', onLeave);
     };
   }, []);
 
   return (
-    <>
-      {/* animated aurora mesh gradient */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/3 -left-1/4 w-[60vw] h-[60vw] rounded-full opacity-30 blur-[110px] bg-gradient-to-br from-blue-600 via-cyan-500 to-transparent animate-[drift1_18s_ease-in-out_infinite]" />
-        <div className="absolute -bottom-1/3 -right-1/4 w-[55vw] h-[55vw] rounded-full opacity-25 blur-[110px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-transparent animate-[drift2_22s_ease-in-out_infinite]" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[40vw] h-[40vw] rounded-full opacity-[0.12] blur-[130px] bg-blue-400 animate-[drift3_26s_ease-in-out_infinite]" />
-      </div>
-
-      {/* moving grid with slow pan */}
+    <div ref={wrapRef} className="absolute inset-0 pointer-events-none">
       <div
-        className="absolute inset-0 pointer-events-none animate-[panGrid_40s_linear_infinite]"
+        className="absolute inset-0 animate-[panGrid_40s_linear_infinite]"
         style={{
           backgroundImage:
             'linear-gradient(rgba(56,139,253,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(56,139,253,0.06) 1px, transparent 1px)',
@@ -236,39 +411,25 @@ const ReactiveBackground: React.FC = () => {
           WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 40%, black 40%, transparent 90%)',
         }}
       />
-
-      {/* cursor-follow glow */}
       <div
         ref={glowRef}
-        className="absolute w-[400px] h-[400px] rounded-full pointer-events-none opacity-0 transition-opacity duration-300 blur-[80px]"
+        className="absolute w-[400px] h-[400px] rounded-full opacity-0 transition-opacity duration-300 blur-[80px]"
         style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%)' }}
       />
-
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
-
-      <style>{`
-        @keyframes drift1 { 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(6%,8%) scale(1.1);} }
-        @keyframes drift2 { 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(-6%,-6%) scale(1.08);} }
-        @keyframes drift3 { 0%,100%{ transform: translate(-50%,0) scale(1);} 50%{ transform: translate(-50%,-10%) scale(1.15);} }
-        @keyframes panGrid { from{ background-position: 0 0, 0 0;} to{ background-position: 48px 48px, 48px 48px;} }
-      `}</style>
-    </>
+      <style>{`@keyframes panGrid { from{ background-position: 0 0, 0 0;} to{ background-position: 48px 48px, 48px 48px;} }`}</style>
+    </div>
   );
 };
 
-// --- Main component ---
+/* ============ Main Hero ============ */
 const Hero: React.FC = () => {
-  // ── one-time name typewriter ──
   const [displayName, setDisplayName] = useState('');
   const [nameTyped, setNameTyped] = useState(false);
-
-  // ── cycling role typewriter ──
   const [roleText, setRoleText] = useState('');
   const roleIdxRef = useRef(0);
   const charIdxRef = useRef(0);
   const deletingRef = useRef(false);
 
-  /* type the name once on mount */
   useEffect(() => {
     let i = 0;
     const id = setInterval(() => {
@@ -282,10 +443,8 @@ const Hero: React.FC = () => {
     return () => clearInterval(id);
   }, []);
 
-  /* start cycling roles only after name is fully typed */
   useEffect(() => {
     if (!nameTyped) return;
-
     let timeout: ReturnType<typeof setTimeout>;
 
     const tick = () => {
@@ -319,32 +478,24 @@ const Hero: React.FC = () => {
   }, [nameTyped]);
 
   return (
-    <section
-      id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-[#060b14]"
-    >
-      <ReactiveBackground />
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-[#060b14]">
+      <ThreeBackground />
+      <AmbientOverlay />
 
       <div className="relative z-10 max-w-2xl mx-auto px-6 text-center animate-fade-in">
-
-        {/* Status badge */}
         <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-xs font-medium tracking-wide text-emerald-300 border border-emerald-500/25 bg-emerald-500/[0.08]">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           Available for opportunities
         </div>
 
-        {/* Name — typed once, never replays */}
         <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-[#f0f6ff] mb-3 leading-tight">
           Hi, I'm{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
             {displayName}
-            {!nameTyped && (
-              <span className="text-blue-400 animate-[blink_0.9s_step-end_infinite]">|</span>
-            )}
+            {!nameTyped && <span className="text-blue-400 animate-[blink_0.9s_step-end_infinite]">|</span>}
           </span>
         </h1>
 
-        {/* Role typewriter — starts only after name is done */}
         <p className="text-xl text-gray-400 mb-2 h-8">
           {nameTyped && (
             <>
@@ -358,7 +509,6 @@ const Hero: React.FC = () => {
           Full-Stack Development · MERN Stack · Spring Boot · Real-time Applications · Cloud Deployment
         </p>
 
-        {/* CTAs */}
         <div className="flex flex-wrap gap-3 justify-center mb-7">
           <a
             href="#projects"
@@ -377,7 +527,6 @@ const Hero: React.FC = () => {
           </a>
         </div>
 
-        {/* Social */}
         <div className="flex justify-center gap-3 mb-8">
           {SOCIAL_LINKS.map((s) => (
             <a
@@ -393,7 +542,6 @@ const Hero: React.FC = () => {
           ))}
         </div>
 
-        {/* Stats */}
         <div className="flex flex-wrap gap-2.5 justify-center">
           {STATS.map((s, i) => (
             <div
@@ -411,16 +559,15 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[10px] tracking-widest text-blue-900/60 animate-bounce">
         <span>SCROLL</span>
         <ChevronDown size={14} />
       </div>
 
       <style>{`
-        @keyframes blink     { 0%,100%{opacity:1} 50%{opacity:0} }
-        @keyframes fade-in   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        .animate-fade-in     { animation: fade-in 0.8s ease both; }
+        @keyframes blink   { 0%,100%{opacity:1} 50%{opacity:0} }
+        @keyframes fade-in { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        .animate-fade-in   { animation: fade-in 0.8s ease both; }
       `}</style>
     </section>
   );

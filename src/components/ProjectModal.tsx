@@ -8,11 +8,18 @@ interface ProjectModalProps {
 }
 
 const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
-  const [index, setIndex] = useState(0);
+  if (!project) return null;
 
-  useEffect(() => {
-    setIndex(0);
-  }, [project]);
+  return <ProjectModalContent key={project.title} project={project} onClose={onClose} />;
+};
+
+// ProjectModal ensures project is non-null before rendering this component
+const ProjectModalContent: React.FC<{ project: Project; onClose: () => void }> = ({ project, onClose }) => {
+  const [index, setIndex] = useState(0);
+  const total = project ? project.image.length : 0;
+
+  const prev = () => setIndex((i) => (i === 0 ? total - 1 : i - 1));
+  const next = () => setIndex((i) => (i === total - 1 ? 0 : i + 1));
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -30,14 +37,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
       document.removeEventListener('keydown', handleEsc);
       document.body.style.overflow = prevOverflow || '';
     };
-  }, [onClose, project, index]);
-
-  if (!project) return null;
-
-  const total = project.image.length;
-
-  const prev = () => setIndex((i) => (i === 0 ? total - 1 : i - 1));
-  const next = () => setIndex((i) => (i === total - 1 ? 0 : i + 1));
+  }, [onClose, prev, next]);
 
   const handleClose = () => {
     document.body.style.overflow = '';
