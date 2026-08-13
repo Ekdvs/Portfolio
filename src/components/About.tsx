@@ -5,6 +5,7 @@ import {
   Lightbulb, Users, RefreshCw, Clock, TrendingUp, MessageSquare,
 
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import type { Service } from '../types';
 import ExperienceSection from './Experience';
 import { experience } from '../data/experience';
@@ -101,7 +102,7 @@ const tagClass: Record<string, string> = {
   purple: 'border-purple-500/20 bg-purple-500/8 text-purple-300',
 };
 
-const Section: React.FC<{ icon: React.ElementType; label: string }> = ({ icon: Icon, label }) => (
+const Section: React.FC<{ icon: LucideIcon; label: string }> = ({ icon: Icon, label }) => (
   <div className="flex items-center gap-2 text-[11px] text-blue-400/80 font-semibold uppercase tracking-widest mb-4">
     <Icon size={13} className="text-blue-500" />
     {label}
