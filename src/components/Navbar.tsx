@@ -1,20 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X } from 'lucide-react';
 
-interface NavbarProps {
-  activeSection?: string;
-}
+const NAV_ITEMS = ['Home', 'About', 'Projects', 'Certificates', 'Skills', 'Contact'];
 
-const NAV_ITEMS = ['Home', 'About', 'Projects','Certificates', 'Skills','Contact'];
-
-const Navbar: React.FC<NavbarProps> = ({ activeSection = 'home' }) => {
+const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const activeSectionRef = useRef(activeSection);
+
+  useEffect(() => {
+    activeSectionRef.current = activeSection;
+  }, [activeSection]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Scroll-spy: track which section is currently in view
+  useEffect(() => {
+    const sectionIds = NAV_ITEMS.map((item) => item.toLowerCase());
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Pick the entry closest to the top of the viewport among those intersecting
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+        if (visible.length > 0) {
+          const id = visible[0].target.id;
+          if (id !== activeSectionRef.current) setActiveSection(id);
+        }
+      },
+      {
+        // Trigger when a section occupies the middle band of the viewport
+        rootMargin: '-40% 0px -55% 0px',
+        threshold: 0,
+      }
+    );
+
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
   }, []);
 
   const scrollTo = (item: string) => {
@@ -34,11 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection = 'home' }) => {
               : 'bg-transparent'
           }`}>
 
-            {/* Logo */}
-            <button
-              onClick={() => scrollTo('home')}
-              className="group flex items-center gap-2"
-            >
+            <button onClick={() => scrollTo('home')} className="group flex items-center gap-2">
               <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-[10px] font-bold text-white tracking-tight">
                 VS
               </span>
@@ -47,7 +77,6 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection = 'home' }) => {
               </span>
             </button>
 
-            {/* Desktop pill nav */}
             <div className="hidden md:flex items-center gap-1 bg-white/[0.04] border border-white/[0.06] rounded-xl p-1">
               {NAV_ITEMS.map((item) => {
                 const active = activeSection === item.toLowerCase();
@@ -56,9 +85,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection = 'home' }) => {
                     key={item}
                     onClick={() => scrollTo(item)}
                     className={`relative px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      active
-                        ? 'text-white'
-                        : 'text-gray-500 hover:text-gray-300'
+                      active ? 'text-white' : 'text-gray-500 hover:text-gray-300'
                     }`}
                   >
                     {active && (
@@ -70,9 +97,8 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection = 'home' }) => {
               })}
             </div>
 
-            {/* CTA */}
-            <a
-              href="vishwa_sampath_SE.pdf"
+            
+            <a  href="vishwa_sampath_SE.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="hidden md:flex items-center gap-2 text-xs font-medium px-4 py-2 rounded-xl border border-blue-500/30 bg-blue-500/8 text-blue-300 hover:bg-blue-500/15 hover:border-blue-500/50 transition-all duration-200"
@@ -80,7 +106,6 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection = 'home' }) => {
               Resume ↗
             </a>
 
-            {/* Mobile toggle */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-gray-400 hover:text-white transition-colors"
@@ -91,7 +116,6 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection = 'home' }) => {
           </div>
         </div>
 
-        {/* Mobile drawer */}
         <div className={`md:hidden overflow-hidden transition-all duration-300 ${
           isMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
         }`}>
@@ -113,8 +137,8 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection = 'home' }) => {
               );
             })}
             <div className="pt-1 border-t border-white/[0.04]">
-              <a
-                href="vishwa_sampath_SE.pdf"
+              
+              <a  href="vishwa_sampath_SE.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block text-center text-xs font-medium px-4 py-2.5 rounded-xl border border-blue-500/30 bg-blue-500/8 text-blue-300"

@@ -110,6 +110,7 @@ const ParticleNetwork: React.FC = () => {
   const raycaster = useRef(new THREE.Raycaster());
   const plane = useRef(new THREE.Plane(new THREE.Vector3(0, 0, 1), 0));
 
+  // Static particle definitions never change after mount, so useMemo is fine here.
   const particles = useMemo(
     () =>
       Array.from({ length: PARTICLE_COUNT }, (_, i) => {
@@ -132,12 +133,14 @@ const ParticleNetwork: React.FC = () => {
     []
   );
 
-  const positions = useMemo(() => new Float32Array(PARTICLE_COUNT * 3), []);
-  const colors = useMemo(() => new Float32Array(PARTICLE_COUNT * 3), []);
+  // These typed arrays are mutated every frame inside useFrame, so they must
+  // live in a ref (mutable persistent storage), not a memoized hook value.
+  const positionsRef = useRef<Float32Array>(new Float32Array(PARTICLE_COUNT * 3));
+  const colorsRef = useRef<Float32Array>(new Float32Array(PARTICLE_COUNT * 3));
 
   const maxLines = (PARTICLE_COUNT * (PARTICLE_COUNT - 1)) / 2;
-  const linePositions = useMemo(() => new Float32Array(maxLines * 2 * 3), [maxLines]);
-  const lineColors = useMemo(() => new Float32Array(maxLines * 2 * 3), [maxLines]);
+  const linePositionsRef = useRef<Float32Array>(new Float32Array(maxLines * 2 * 3));
+  const lineColorsRef = useRef<Float32Array>(new Float32Array(maxLines * 2 * 3));
 
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
@@ -159,6 +162,10 @@ const ParticleNetwork: React.FC = () => {
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     const m = mouseWorld.current;
+    const positions = positionsRef.current;
+    const colors = colorsRef.current;
+    const linePositions = linePositionsRef.current;
+    const lineColors = lineColorsRef.current;
 
     particles.forEach((p, i) => {
       const dx = p.x - m.x;
@@ -235,8 +242,8 @@ const ParticleNetwork: React.FC = () => {
     <>
       <points ref={pointsRef}>
         <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-          <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+          <bufferAttribute attach="attributes-position" args={[positionsRef.current, 3]} />
+          <bufferAttribute attach="attributes-color" args={[colorsRef.current, 3]} />
         </bufferGeometry>
         <pointsMaterial
           vertexColors
@@ -250,8 +257,8 @@ const ParticleNetwork: React.FC = () => {
       </points>
       <lineSegments ref={linesRef} frustumCulled={false}>
         <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[linePositions, 3]} />
-          <bufferAttribute attach="attributes-color" args={[lineColors, 3]} />
+          <bufferAttribute attach="attributes-position" args={[linePositionsRef.current, 3]} />
+          <bufferAttribute attach="attributes-color" args={[lineColorsRef.current, 3]} />
         </bufferGeometry>
         <lineBasicMaterial vertexColors transparent opacity={0.35} blending={THREE.AdditiveBlending} depthWrite={false} />
       </lineSegments>
@@ -413,7 +420,7 @@ const AmbientOverlay: React.FC = () => {
       />
       <div
         ref={glowRef}
-        className="absolute w-[400px] h-[400px] rounded-full opacity-0 transition-opacity duration-300 blur-[80px]"
+        className="absolute w-100 h-100 rounded-full opacity-0 transition-opacity duration-300 blur-[80px]"
         style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%)' }}
       />
       <style>{`@keyframes panGrid { from{ background-position: 0 0, 0 0;} to{ background-position: 48px 48px, 48px 48px;} }`}</style>
@@ -483,14 +490,14 @@ const Hero: React.FC = () => {
       <AmbientOverlay />
 
       <div className="relative z-10 max-w-2xl mx-auto px-6 text-center animate-fade-in">
-        <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-xs font-medium tracking-wide text-emerald-300 border border-emerald-500/25 bg-emerald-500/[0.08]">
+        <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-xs font-medium tracking-wide text-emerald-300 border border-emerald-500/25 bg-emerald-500/8">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           Available for opportunities
         </div>
 
         <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-[#f0f6ff] mb-3 leading-tight">
           Hi, I'm{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-cyan-400">
             {displayName}
             {!nameTyped && <span className="text-blue-400 animate-[blink_0.9s_step-end_infinite]">|</span>}
           </span>
@@ -546,7 +553,7 @@ const Hero: React.FC = () => {
           {STATS.map((s, i) => (
             <div
               key={s.label}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/[0.07] bg-white/[0.03] hover:border-blue-500/30 hover:bg-white/[0.05] transition-all duration-200"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/[0.07] bg-white/3 hover:border-blue-500/30 hover:bg-white/5 transition-all duration-200"
               style={{ animationDelay: `${i * 0.15}s` }}
             >
               <s.icon size={15} className="text-blue-500 shrink-0" />
