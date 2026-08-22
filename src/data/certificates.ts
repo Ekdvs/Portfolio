@@ -59,6 +59,31 @@ export const certificates: Certificate[] = [
     image: '/certificates/kodeklouddocker.png',
     description: 'Hands-on labs covering Docker fundamentals, image building, and container orchestration basics.',
   },
+  {
+  id: 19,
+  name: 'Docker for Absolute Beginners with Hands on Projects',
+  issuer: 'CoDeKu DevOps Academy',
+  date: 'Aug 2026',
+  status: 'done',
+  tags: [
+    'Docker',
+    'Docker Compose',
+    'Dockerfile',
+    'Docker Images',
+    'Docker Containers',
+    'Docker Volumes',
+    'Containerization',
+    'AWS',
+    'CI/CD',
+    'DockerHub',
+    'DevOps',
+    'Cloud Computing'
+  ],
+  credentialId: '',
+  url: '',
+  image: '/certificates/docker.png',
+  description: 'Completed Docker for Absolute Beginners with Hands on Projects, covering Docker fundamentals, containers, images, Dockerfiles, volumes, persistent storage, Docker Compose, frontend and backend containerization, database integration, container deployment using AWS, logging, Docker image optimization, and CI/CD automation with DockerHub.'
+},
 
   {
     id: 15,
