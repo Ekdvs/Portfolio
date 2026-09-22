@@ -127,10 +127,10 @@ export const certificates: Certificate[] = [
     name: 'CloudPath Pro — DevOps & Cloud Engineering',
     issuer: 'Learnfi',
     date: '2026',
-    status: 'progress',
+    status: 'done',
     tags: ['DevOps', 'Cloud', 'CI/CD', 'Aws'],
-    url: null,
-    image: null,
+    url: "https://learnfi.lk/cert/f430f4e0-ba93-42e8-bdb4-32523fe13df0",
+    image: "/certificates/CLOUDPATH PRO.png",
     description: 'In-progress program covering CI/CD pipelines, IaC, and multi-cloud deployment strategies.',
   },
   {
